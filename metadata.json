@@ -1,0 +1,6 @@
+{
+  "name": "Calisthenics Coaching Program",
+  "description": "A premium, modern, and fully responsive one-page website for an elite calisthenics coaching program.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

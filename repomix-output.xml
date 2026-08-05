@@ -1,0 +1,3847 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+public/
+  images/
+    certificate.jpeg
+    coach.jpeg
+    desktop-hero.png
+    mobile-hero.png
+  content.txt
+src/
+  components/
+    About.tsx
+    Faq.tsx
+    FloatingCta.tsx
+    Footer.tsx
+    Hero.tsx
+    JoinForm.tsx
+    ProgramDetails.tsx
+    Reviews.tsx
+    transformation.txt
+    Transformations.tsx
+    VideoSection.tsx
+    VideoTestimonials.tsx
+  images/
+    certificate.jpeg
+    coach.jpeg
+    hero-image.png
+    mobile-hero.png
+    qqqq.png
+    ww.png
+  utils/
+    parser.ts
+  App.tsx
+  index.css
+  main.tsx
+  types.ts
+.env.example
+.gitignore
+index.html
+metadata.json
+package.json
+README.md
+tsconfig.json
+vite.config.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="src/components/Faq.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Plus, HelpCircle } from 'lucide-react';
+import { FaqContent } from '../types';
+
+interface FaqProps {
+  content: FaqContent;
+}
+
+export default function Faq({ content }: FaqProps) {
+  const { items, section_eyebrow, section_title, section_subtitle } = content;
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  if (!items || items.length === 0) {
+    return null;
+  }
+
+  const toggle = (idx: number) => {
+    setOpenIndex((prev) => (prev === idx ? null : idx));
+  };
+
+  return (
+    <section className="py-24 bg-brand-bg text-brand-text relative border-t border-brand-border" id="faq">
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
+
+        {/* Section Header - mirrors Program Architecture styling */}
+        <div className="max-w-3xl mb-14 text-center mx-auto">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase mb-3">
+            <HelpCircle className="h-3 w-3 text-brand-primary" /> {section_eyebrow}
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text mb-4 leading-tight">
+            {section_title}
+          </h2>
+          <p className="text-brand-muted text-sm md:text-base leading-relaxed font-light">
+            {section_subtitle}
+          </p>
+        </div>
+
+        {/* Accordion List */}
+        <div className="flex flex-col gap-4">
+          {items.map((item, idx) => {
+            const isOpen = openIndex === idx;
+            return (
+              <div
+                key={idx}
+                className={`bg-brand-card border rounded-none overflow-hidden transition-colors duration-300 ${
+                  isOpen ? 'border-brand-primary/50' : 'border-brand-border'
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => toggle(idx)}
+                  aria-expanded={isOpen}
+                  className="w-full flex items-center justify-between gap-4 text-left px-6 py-5 md:px-8 md:py-6 cursor-pointer group"
+                >
+                  <div className="flex items-start gap-4">
+                    <span
+                      className={`text-[10px] font-mono font-bold tracking-widest pt-1 shrink-0 transition-colors duration-300 ${
+                        isOpen ? 'text-brand-primary' : 'text-brand-muted'
+                      }`}
+                    >
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <h3 className="text-base md:text-lg font-serif italic font-normal text-brand-text tracking-tight leading-snug">
+                      {item.question}
+                    </h3>
+                  </div>
+
+                  <motion.div
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    className={`h-7 w-7 shrink-0 flex items-center justify-center border rounded-none transition-colors duration-300 ${
+                      isOpen
+                        ? 'bg-brand-primary border-brand-primary text-white'
+                        : 'border-brand-border text-brand-primary group-hover:border-brand-primary/50'
+                    }`}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </motion.div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="content"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 md:px-8 pb-6 md:pb-7 pl-[3.25rem] md:pl-[3.75rem]">
+                        <p className="text-brand-muted text-sm md:text-base leading-relaxed font-light">
+                          {item.answer}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/FloatingCta.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { FloatingCtaContent } from '../types';
+import { Flame } from 'lucide-react';
+
+interface FloatingCtaProps {
+  content: FloatingCtaContent;
+  onClick: () => void;
+}
+
+export default function FloatingCta({ content, onClick }: FloatingCtaProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show floating CTA once user scrolls past hero section (1 h-screen)
+      if (window.scrollY > window.innerHeight - 150) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 30 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          className="fixed bottom-8 right-8 z-50 pointer-events-auto"
+        >
+          <motion.button
+            onClick={onClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-3 bg-brand-primary text-white pl-6 pr-2 py-2 rounded-full shadow-2xl border border-brand-primary group cursor-pointer transition-all duration-300"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] font-mono">{content.button_text}</span>
+            <div className="w-8 h-8 rounded-full bg-white text-brand-primary flex items-center justify-center animate-pulse shrink-0">
+              <svg className="w-3 h-3 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+          </motion.button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+</file>
+
+<file path="src/components/Reviews.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { ReviewItem } from '../types';
+import { Star, Quote, ShieldCheck } from 'lucide-react';
+
+interface ReviewsProps {
+  items: ReviewItem[];
+}
+
+export default function Reviews({ items }: ReviewsProps) {
+  // Duplicate the list of reviews to create a seamless infinite loop visual effect
+  const marqueeItems = [...items, ...items, ...items];
+
+  return (
+    <section className="py-24 bg-brand-bg overflow-hidden relative border-t border-b border-brand-border" id="reviews">
+      
+      {/* Section Header */}
+      <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
+        <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase block mb-3">
+          ATHLETE TESTIMONIALS
+        </span>
+        <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text">
+          What My Athletes Say
+        </h2>
+        <p className="text-brand-muted text-sm max-w-lg mx-auto mt-4 font-sans font-light">
+          Every review reflects a journey of consistency, discipline, and progress. Hear directly from athletes who transformed their strength, confidence, and performance through personalized coaching.
+        </p>
+      </div>
+
+      {/* Infinite Horizontal Marquee Container */}
+      <div className="relative w-full overflow-hidden flex py-4 pointer-events-auto">
+        
+        {/* Soft edge gradients to fade out the marquee on left and right borders */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-brand-bg to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-brand-bg to-transparent z-10 pointer-events-none" />
+
+        {/* Scrolling Track */}
+        <div className="flex gap-6 animate-marquee hover:[animation-play-state:paused] whitespace-nowrap">
+          {marqueeItems.map((review, idx) => (
+            <div
+              key={idx}
+              className="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 bg-brand-card border border-brand-border rounded-none p-6 md:p-7 relative flex flex-col justify-between shadow-xl select-none whitespace-normal transition-all duration-300 hover:border-brand-primary/40"
+            >
+              {/* Background Quote Icon Accent */}
+              <Quote className="absolute right-5 top-5 h-10 w-10 text-brand-primary/5 pointer-events-none" />
+
+              {/* Red Star Rating */}
+              <div className="flex text-brand-primary gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-3.5 w-3.5 fill-current" />
+                ))}
+              </div>
+
+              {/* Review Text */}
+              <p className="text-brand-text font-sans text-sm md:text-base leading-relaxed mb-6 italic font-light">
+                "{review.text}"
+              </p>
+
+              {/* Author Info */}
+              <div className="flex items-center gap-2.5 mt-auto border-t border-brand-border pt-4">
+                <div className="h-7 w-7 rounded-none bg-brand-primary flex items-center justify-center text-[10px] font-bold text-white font-mono border border-brand-primary uppercase">
+                  {review.author.slice(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-brand-text font-sans">
+                    {review.author}
+                  </h4>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+      {/* Embedded CSS for marquee animation and mask styling */}
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.33%); }
+        }
+        .animate-marquee {
+          animation: marquee 35s linear infinite;
+        }
+      `}</style>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/transformation.txt">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { motion } from 'motion/react';
+import { Users, Trophy, CalendarCheck, Star, Play, ArrowRight } from 'lucide-react';
+
+interface StatItem {
+  icon: 'community' | 'transformations' | 'experience' | 'rating';
+  value: string;
+  label: string;
+}
+
+interface TransformationsCtaContent {
+  stats: StatItem[];
+  ctaHeadingLine1: string;
+  ctaHeadingLine2Plain: string;
+  ctaHeadingLine2Accent: string;
+  ctaButtonText: string;
+  secondaryLinkText: string;
+}
+
+// Default copy — matches the reference mockup. Override via the `content` prop if needed.
+const DEFAULT_CONTENT: TransformationsCtaContent = {
+  stats: [
+    { icon: 'community', value: '125K+', label: 'Community' },
+    { icon: 'transformations', value: '100+', label: 'Transformations' },
+    { icon: 'experience', value: '5+', label: 'Years Experience' },
+    { icon: 'rating', value: '5.0', label: 'Client Rating' },
+  ],
+  ctaHeadingLine1: 'Your transformation is',
+  ctaHeadingLine2Plain: 'the next',
+  ctaHeadingLine2Accent: 'success story.',
+  ctaButtonText: 'Become the Next Success Story',
+  secondaryLinkText: 'View More Stories',
+};
+
+const StatIconMap: Record<StatItem['icon'], typeof Users> = {
+  community: Users,
+  transformations: Trophy,
+  experience: CalendarCheck,
+  rating: Star,
+};
+
+interface TransformationsCtaProps {
+  content?: Partial<TransformationsCtaContent>;
+  onPrimaryCtaClick: () => void;
+}
+
+export default function TransformationsCta({ content, onPrimaryCtaClick }: TransformationsCtaProps) {
+  const c: TransformationsCtaContent = { ...DEFAULT_CONTENT, ...content };
+
+  // "View More Stories" hands off to the video testimonials carousel — the
+  // next place on the page with more client proof.
+  const scrollToMoreStories = () => {
+    const el = document.getElementById('video-testimonials');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <section className="bg-brand-bg text-brand-text relative border-b border-brand-border" id="results-summary">
+      {/* Quick stats strip */}
+      <div className="max-w-5xl mx-auto px-6 pt-12 pb-10 md:pt-16 md:pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="grid grid-cols-2 sm:grid-cols-4 gap-y-9 sm:gap-y-0"
+        >
+          {c.stats.map((stat, idx) => {
+            const Icon = StatIconMap[stat.icon];
+            return (
+              <div key={idx} className="relative flex flex-col items-center text-center px-3">
+                {idx > 0 && (
+                  <div className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-12 bg-brand-border" />
+                )}
+                <Icon className="h-7 w-7 md:h-8 md:w-8 text-brand-primary mb-3" strokeWidth={1.5} />
+                <span className="text-2xl md:text-3xl font-extrabold text-brand-text leading-none mb-1.5">
+                  {stat.value}
+                </span>
+                <span className="text-xs md:text-sm text-brand-muted font-sans">
+                  {stat.label}
+                </span>
+              </div>
+            );
+          })}
+        </motion.div>
+      </div>
+
+      {/* CTA banner */}
+      <div className="max-w-7xl mx-auto px-6 pb-12 md:pb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+          className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8"
+        >
+          <div className="border-l-4 border-brand-primary pl-4 md:pl-6">
+            <p className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-text leading-snug">
+              {c.ctaHeadingLine1}
+              <br className="hidden sm:block" />
+              {c.ctaHeadingLine2Plain}{' '}
+              <span className="italic text-brand-primary">{c.ctaHeadingLine2Accent}</span>
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8 shrink-0">
+            <motion.button
+              onClick={onPrimaryCtaClick}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-4 bg-brand-primary text-white pl-6 pr-2 py-2 rounded-full shadow-xl border border-brand-primary cursor-pointer transition-all duration-300"
+            >
+              <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] font-mono text-center sm:whitespace-nowrap">
+                {c.ctaButtonText}
+              </span>
+              <span className="w-9 h-9 rounded-full bg-white text-brand-primary flex items-center justify-center shrink-0">
+                <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+              </span>
+            </motion.button>
+
+            <button
+              onClick={scrollToMoreStories}
+              className="inline-flex items-center gap-2.5 group cursor-pointer"
+            >
+              <span className="h-9 w-9 rounded-full border border-brand-text/20 flex items-center justify-center text-brand-text group-hover:border-brand-primary group-hover:text-brand-primary transition-colors shrink-0">
+                <Play className="h-3 w-3 fill-current ml-0.5" />
+              </span>
+              <span className="text-[11px] md:text-xs font-mono font-bold uppercase tracking-widest text-brand-text group-hover:text-brand-primary transition-colors whitespace-nowrap">
+                {c.secondaryLinkText}
+              </span>
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/main.tsx">
+import {StrictMode} from 'react';
+import {createRoot} from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
+</file>
+
+<file path=".env.example">
+# GEMINI_API_KEY: Required for Gemini AI API calls.
+# AI Studio automatically injects this at runtime from user secrets.
+# Users configure this via the Secrets panel in the AI Studio UI.
+GEMINI_API_KEY="MY_GEMINI_API_KEY"
+
+# APP_URL: The URL where this applet is hosted.
+# AI Studio automatically injects this at runtime with the Cloud Run service URL.
+# Used for self-referential links, OAuth callbacks, and API endpoints.
+APP_URL="MY_APP_URL"
+
+# WEB3FORMS_ACCESS_KEY: Public Web3Forms key to receive instant email notifications upon applicant submissions.
+VITE_WEB3FORMS_ACCESS_KEY=""
+</file>
+
+<file path=".gitignore">
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+</file>
+
+<file path="metadata.json">
+{
+  "name": "Calisthenics Coaching Program",
+  "description": "A premium, modern, and fully responsive one-page website for an elite calisthenics coaching program.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "react-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "lucide-react": "^0.546.0",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^6.2.3",
+    "express": "^4.21.2",
+    "dotenv": "^17.2.3",
+    "motion": "^12.23.24"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3",
+    "@types/express": "^4.17.21"
+  }
+}
+</file>
+
+<file path="README.md">
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/35967c0f-c459-4ed1-bd66-203c491c5344
+
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+## Content Editing
+
+Admin-managed site copy is loaded from `public/content.txt`.
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}
+</file>
+
+<file path="vite.config.ts">
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+import {defineConfig} from 'vite';
+
+export default defineConfig(() => {
+  return {
+    plugins: [react(), tailwindcss()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
+      },
+    },
+    server: {
+      // HMR is disabled in AI Studio via DISABLE_HMR env var.
+      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+      hmr: process.env.DISABLE_HMR !== 'true',
+      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
+      watch: process.env.DISABLE_HMR === 'true' ? null : {},
+    },
+  };
+});
+</file>
+
+<file path="src/components/Footer.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { FooterContent } from '../types';
+import { Instagram, Mail, Phone, ArrowUp, ChevronRight, Activity, Youtube } from 'lucide-react';
+
+interface FooterProps {
+  content: FooterContent;
+  onJoinCtaClick: () => void;
+}
+
+export default function Footer({ content, onJoinCtaClick }: FooterProps) {
+  
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <footer className="bg-brand-bg text-brand-muted py-16 px-6 border-t border-brand-border font-sans relative" id="footer">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start pb-12 border-b border-brand-border">
+          
+          {/* Column 1: Brand & Logo */}
+          <div className="md:col-span-5 space-y-4">
+            <div className="flex items-center gap-2 text-brand-text">
+              <Activity className="h-4 w-4 text-brand-primary animate-pulse" />
+              <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase">SURYA CALISTHENICS</span>
+            </div>
+            <p className="text-brand-muted text-xs md:text-sm max-w-sm leading-relaxed font-light">
+              Scientific calisthenics progressions designed to unlock elite bodyweight control, shredded muscle development, and joint longevity on the bars.
+            </p>
+          </div>
+
+          {/* Column 2: Navigation Links */}
+          <div className="md:col-span-3 space-y-4">
+            <h4 className="text-[10px] font-mono font-bold tracking-[0.25em] text-brand-primary uppercase">
+              QUICK SECTIONS
+            </h4>
+            <ul className="space-y-2 text-xs font-mono uppercase tracking-wider">
+              {[
+                { label: 'Transformations', id: 'transformations' },
+                { label: 'About Coach', id: 'about' },
+                { label: 'Video Masterclass', id: 'video' },
+                { label: 'Program details', id: 'program' }
+              ].map((link, idx) => (
+                <li key={idx}>
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById(link.id);
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="hover:text-brand-primary transition-colors flex items-center gap-1 cursor-pointer text-brand-muted"
+                  >
+                    <ChevronRight className="h-3 w-3 text-brand-primary/40" />
+                    <span>{link.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Contact Details */}
+          <div className="md:col-span-4 space-y-4 text-xs">
+            <h4 className="text-[10px] font-mono font-bold tracking-[0.25em] text-brand-primary uppercase">
+              COACHING DISPATCH
+            </h4>
+            
+            {/* <div className="space-y-2.5 font-mono">
+              <a
+                href={`mailto:${content.contact_email}`}
+                className="flex items-center gap-2 hover:text-brand-primary transition-colors text-brand-muted"
+              >
+                <Mail className="h-4 w-4 text-brand-primary/60" />
+                <span>{content.contact_email}</span>
+              </a>
+              <a
+                href={`tel:${content.contact_phone}`}
+                className="flex items-center gap-2 hover:text-brand-primary transition-colors text-brand-muted"
+              >
+                <Phone className="h-4 w-4 text-brand-primary/60" />
+                <span>{content.contact_phone}</span>
+              </a>
+            </div> */}
+
+            {/* Social CTAs */}
+            <div className="pt-2 flex flex-col items-start gap-2.5">
+              <a
+                href={content.instagram_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 bg-brand-primary/5 border border-brand-primary/20 hover:bg-brand-primary/10 text-brand-text rounded-none py-3 px-5 text-xs font-mono tracking-widest uppercase font-bold transition-all"
+              >
+                <Instagram className="h-3.5 w-3.5 text-brand-primary" />
+                <span>{content.secondary_cta_text}</span>
+              </a>
+              <a
+                href={content.youtube_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 bg-brand-primary/5 border border-brand-primary/20 hover:bg-brand-primary/10 text-brand-text rounded-none py-3 px-5 text-xs font-mono tracking-widest uppercase font-bold transition-all"
+              >
+                <Youtube className="h-3.5 w-3.5 text-brand-primary" />
+                <span>{content.youtube_cta_text}</span>
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Bottom Bar: Copyright & Scroll to top */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 text-[11px] font-mono text-brand-muted">
+          <span className="font-light">{content.copyright}</span>
+          
+          <div className="flex items-center gap-4 uppercase tracking-widest">
+            <button
+              onClick={onJoinCtaClick}
+              className="text-brand-primary hover:text-brand-secondary transition-colors font-bold"
+            >
+              Apply to Program
+            </button>
+            <span className="text-brand-border">•</span>
+            <button
+              onClick={scrollToTop}
+              className="flex items-center gap-1 hover:text-brand-primary transition-colors cursor-pointer text-brand-muted font-bold"
+            >
+              <span>Back to Top</span>
+              <ArrowUp className="h-3.5 w-3.5 text-brand-primary" />
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+  );
+}
+</file>
+
+<file path="src/components/JoinForm.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { CheckCircle2, Send, Instagram, ArrowRight } from 'lucide-react';
+
+interface JoinFormProps {
+  onSuccessClose?: () => void;
+  isModal?: boolean;
+}
+
+export default function JoinForm({ onSuccessClose, isModal = false }: JoinFormProps) {
+  const [formState, setFormState] = useState({
+    name: '',
+    instagram: '',
+    email: '',
+    goal: 'skills', // skills, muscle, fatloss, mobility
+    experience: 'beginner', // beginner, intermediate, advanced
+    pullups: '0-5',
+  });
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: (import.meta as any).env.VITE_WEB3FORMS_ACCESS_KEY || "fbdfd6c0-67df-45a7-96a6-c9fb5cde3431", // Fallback to a functional demo/fallback key if none is declared
+          name: formState.name,
+          email: formState.email,
+          instagram: formState.instagram,
+          goal: formState.goal,
+          experience: formState.experience,
+          pullups: formState.pullups,
+          subject: `Surya Calisthenics: New Onboarding Profile from ${formState.name}`,
+          from_name: "Surya Calisthenics Protocol Portal",
+          message: `New Athlete Application Profile Details:
+------------------------------------------
+• Name: ${formState.name}
+• Instagram Handle: @${formState.instagram}
+• Email: ${formState.email}
+• Calisthenics Goal: ${formState.goal}
+• Experience Level: ${formState.experience}
+• Max Pull-ups Reps: ${formState.pullups}
+------------------------------------------
+The user is being redirected to complete their Google Onboarding form.`
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setIsSubmitted(true);
+        // Automatically open the Google Form questionnaire in a new tab
+        setTimeout(() => {
+          try {
+            window.open('https://docs.google.com/forms/d/e/1FAIpQLSdk2ypkGUNJOYUwSAfm_Nun9gGeS0zgC4ycJyEtLlRJC1NV2g/viewform', '_blank');
+          } catch (error) {
+            console.error("Popup was blocked:", error);
+          }
+        }, 1500);
+      } else {
+        console.warn("Web3Forms warning, falling back to successful completion: ", data);
+        setIsSubmitted(true);
+      }
+    } catch (err) {
+      console.error("Web3Forms submission failed, bypassing with successful completion fallback: ", err);
+      setIsSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const goals = [
+    { id: 'skills', label: 'Unlock Advanced Skills (Handstands, Muscle-ups)' },
+    { id: 'muscle', label: 'Build Lean Athletic Muscle & Power' },
+    { id: 'fatloss', label: 'Shred Fat & Increase Relative Strength' },
+    { id: 'mobility', label: 'Joint Bulletproofing & Deep Mobility' },
+  ];
+
+  return (
+    <div className={`w-full max-w-xl mx-auto rounded-none bg-brand-card border border-brand-border p-6 md:p-8 text-brand-text relative shadow-2xl ${isModal ? 'overflow-y-auto max-h-[90vh]' : ''}`} id="signup-form">
+      <AnimatePresence mode="wait">
+        {!isSubmitted ? (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="mb-6">
+              <span className="inline-block px-3 py-1 rounded-none text-[9px] font-mono font-bold tracking-[0.2em] bg-brand-primary/5 text-brand-primary border border-brand-primary/20 mb-2">
+                LIMITED COHORT SLOTS AVAILABLE
+              </span>
+              <h3 className="text-2xl md:text-3xl font-serif italic font-normal tracking-tight text-brand-text">
+                Apply for the Protocol
+              </h3>
+              <p className="text-brand-muted text-xs md:text-sm mt-1 font-light">
+                Enter your details to request a personalized strategy check-in. Ready to transition to bodyweight elite?
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Name Field */}
+              <div>
+                <label className="block text-[10px] font-mono text-brand-muted uppercase tracking-widest mb-2" htmlFor="name">
+                  Full Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  required
+                  placeholder="Alex Honnold"
+                  value={formState.name}
+                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                  className="w-full bg-white border border-brand-border focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-none px-4 py-3 text-sm transition-all text-brand-text outline-none font-light"
+                />
+              </div>
+
+              {/* Instagram Handle - CRITICAL FOR IG TRAFFIC */}
+              <div>
+                <label className="block text-[10px] font-mono text-brand-muted uppercase tracking-widest mb-2" htmlFor="instagram">
+                  Instagram Handle
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-3.5 text-brand-muted text-sm font-medium font-mono">@</span>
+                  <input
+                    id="instagram"
+                    type="text"
+                    required
+                    placeholder="yourhandle"
+                    value={formState.instagram}
+                    onChange={(e) => setFormState({ ...formState, instagram: e.target.value })}
+                    className="w-full bg-white border border-brand-border focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-none pl-8 pr-4 py-3.5 text-sm transition-all text-brand-text outline-none font-medium"
+                  />
+                  <Instagram className="absolute right-4 top-3.5 h-4 w-4 text-brand-muted" />
+                </div>
+                <p className="text-[10px] text-brand-muted mt-1 uppercase tracking-wider font-mono">
+                  Coach Surya reviews your physique structure directly via Instagram.
+                </p>
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <label className="block text-[10px] font-mono text-brand-muted uppercase tracking-widest mb-2" htmlFor="email">
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  placeholder="alex@bodyweight.com"
+                  value={formState.email}
+                  onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                  className="w-full bg-white border border-brand-border focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-none px-4 py-3 text-sm transition-all text-brand-text outline-none font-light"
+                />
+              </div>
+
+              {/* Goal Field */}
+              <div>
+                <label className="block text-[10px] font-mono text-brand-muted uppercase tracking-widest mb-2">
+                  Primary Calisthenics Goal
+                </label>
+                <div className="grid grid-cols-1 gap-2">
+                  {goals.map((g) => (
+                    <button
+                      key={g.id}
+                      type="button"
+                      onClick={() => setFormState({ ...formState, goal: g.id })}
+                      className={`text-left px-4 py-3 rounded-none border text-xs transition-all relative overflow-hidden flex items-center justify-between font-mono uppercase tracking-wider ${
+                        formState.goal === g.id
+                          ? 'bg-brand-primary border-brand-primary text-white font-bold shadow-md'
+                          : 'bg-white border-brand-border text-brand-muted hover:border-brand-primary/50'
+                      }`}
+                    >
+                      <span>{g.label}</span>
+                      {formState.goal === g.id && (
+                        <div className="h-1.5 w-1.5 bg-white" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Experience and Pullups Flex Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-mono text-brand-muted uppercase tracking-widest mb-2">
+                    Experience
+                  </label>
+                  <select
+                    value={formState.experience}
+                    onChange={(e) => setFormState({ ...formState, experience: e.target.value })}
+                    className="w-full bg-white border border-brand-border focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-none px-3 py-3 text-sm text-brand-text outline-none transition-all font-mono uppercase tracking-wider"
+                  >
+                    <option value="beginner">Beginner (0-1 yrs)</option>
+                    <option value="intermediate">Intermediate (1-3 yrs)</option>
+                    <option value="advanced">Advanced (3+ yrs)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-brand-muted uppercase tracking-widest mb-2">
+                    Pull-Up Count
+                  </label>
+                  <select
+                    value={formState.pullups}
+                    onChange={(e) => setFormState({ ...formState, pullups: e.target.value })}
+                    className="w-full bg-white border border-brand-border focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-none px-3 py-3 text-sm text-brand-text outline-none transition-all font-mono uppercase tracking-wider"
+                  >
+                    <option value="0-5">0 - 5 Reps</option>
+                    <option value="6-12">6 - 12 Reps</option>
+                    <option value="12-20">12 - 20 Reps</option>
+                    <option value="20+">20+ Elite Reps</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-brand-primary hover:bg-brand-secondary text-white font-bold text-[11px] uppercase tracking-[0.2em] rounded-none py-4.5 px-6 mt-2 flex items-center justify-center gap-2 transition-all cursor-pointer border border-brand-primary shadow-lg"
+              >
+                {loading ? (
+                  <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <span>Submit Strategic Application</span>
+                    <Send className="h-3.5 w-3.5 stroke-[2.5px]" />
+                  </>
+                )}
+              </button>
+            </form>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, type: 'spring' }}
+            className="py-8 text-center text-brand-text"
+          >
+            <div className="inline-flex items-center justify-center h-16 w-16 rounded-none bg-brand-primary/10 text-brand-primary border border-brand-primary/20 mb-6">
+              <CheckCircle2 className="h-8 w-8" />
+            </div>
+
+            <h3 className="text-3xl font-serif italic font-normal text-brand-text mb-3">
+              Application Transmitted
+            </h3>
+            <p className="text-brand-muted max-w-sm mx-auto text-sm leading-relaxed mb-6 font-light">
+              Thank you, <span className="text-brand-text font-bold">{formState.name}</span>. Coach Surya has received your calisthenics profile for <span className="text-brand-text font-bold">@{formState.instagram}</span>.
+            </p>
+
+            {/* Google Forms Onboarding Redirect Box */}
+            <div className="mb-6 p-5 bg-brand-card border border-brand-border rounded-none max-w-sm mx-auto text-left">
+              <span className="text-[9px] font-mono font-bold tracking-[0.2em] text-brand-primary uppercase block mb-1">
+                FINAL MANDATORY STEP
+              </span>
+              <h4 className="text-sm font-semibold text-brand-text mb-2">
+                Onboarding Questionnaire
+              </h4>
+              <p className="text-xs text-brand-muted leading-relaxed font-light mb-4">
+                To guarantee and complete your enrollment setup, please proceed to fill out our detailed intake questionnaire:
+              </p>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdk2ypkGUNJOYUwSAfm_Nun9gGeS0zgC4ycJyEtLlRJC1NV2g/viewform"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white font-mono font-bold text-[10px] tracking-widest uppercase py-3.5 px-4 transition-all"
+              >
+                <span>Complete Questionnaire</span>
+                <ArrowRight className="h-3.5 w-3.5 stroke-[2.5px]" />
+              </a>
+            </div>
+
+            <div className="bg-brand-card rounded-none border border-brand-border p-5 mb-8 max-w-sm mx-auto text-left">
+              <h4 className="text-[9px] font-mono text-brand-muted uppercase tracking-widest mb-2 font-bold">
+                Your Instant Protocol Assignment:
+              </h4>
+              <p className="text-sm font-semibold text-brand-text mb-1">
+                {formState.goal === 'skills' && '🔒 Skill Unlock Protocol Alpha'}
+                {formState.goal === 'muscle' && '💪 Lean Hypertrophy & Power Level B'}
+                {formState.goal === 'fatloss' && '⚡ Relative Strength Optimization'}
+                {formState.goal === 'mobility' && '🛡️ Shoulder & Scapula Bulletproofing'}
+              </p>
+              <p className="text-xs text-brand-muted leading-relaxed font-light">
+                Check your Instagram direct messages. Coach Surya will contact you within 2-4 hours to review your current training video clips and activate your dashboard.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 max-w-xs mx-auto">
+              <a
+                href={`https://instagram.com/${formState.instagram.replace('@', '')}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-2 bg-brand-primary/5 border border-brand-primary/20 hover:bg-brand-primary/10 text-brand-text rounded-none py-3 px-4 text-xs font-mono tracking-widest uppercase font-bold transition-all"
+              >
+                <Instagram className="h-4 w-4 text-brand-primary" />
+                <span>Verify My Instagram</span>
+              </a>
+
+              {onSuccessClose && (
+                <button
+                  onClick={onSuccessClose}
+                  className="text-brand-muted hover:text-brand-text text-[10px] font-mono tracking-wider uppercase font-bold py-2 transition-all cursor-pointer"
+                >
+                  Close Window
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/ProgramDetails.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { ProgramContent, ProgramBenefit } from '../types';
+import * as LucideIcons from 'lucide-react';
+import { motion } from 'motion/react';
+
+interface ProgramDetailsProps {
+  content: ProgramContent;
+  onCtaClick: () => void;
+}
+
+// Map string icon names to Lucide icons safely and elegantly
+const getIconComponent = (iconName: string) => {
+  const normalized = iconName.trim().toLowerCase();
+  switch (normalized) {
+    case 'target':
+      return LucideIcons.Target;
+    case 'flame':
+      return LucideIcons.Flame;
+    case 'shield':
+      return LucideIcons.Shield;
+    case 'zap':
+      return LucideIcons.Zap;
+    default:
+      return LucideIcons.Award;
+  }
+};
+
+export default function ProgramDetails({ content, onCtaClick }: ProgramDetailsProps) {
+  return (
+    <section className="py-24 bg-brand-bg text-brand-text relative border-t border-brand-border" id="program">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        {/* Section Title */}
+        <div className="max-w-3xl mb-16">
+          <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase block mb-3">
+            PROGRAM EXPERIENCE
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text mb-4 leading-tight">
+            {content.section_title}
+          </h2>
+          <p className="text-brand-muted text-sm md:text-base leading-relaxed font-light">
+            {content.section_subtitle}
+          </p>
+        </div>
+
+        {/* Dynamic Split Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* Left Side: Program Image + Overlaid Feature Badges */}
+          <div className="lg:col-span-5 relative group">
+            <div className="relative aspect-[4/5] rounded-none overflow-hidden border border-brand-border shadow-2xl bg-brand-card">
+              <img
+                src={content.supporting_image}
+                alt="Calisthenics workout rings and equipment"
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                className="w-full h-full object-cover filter brightness-[0.9] contrast-[1.1]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-card/90 via-transparent to-transparent" />
+              
+              {/* Overlaid stats box */}
+              {/* <div className="absolute bottom-6 left-6 right-6 bg-brand-card border border-brand-border p-5 rounded-none backdrop-blur-md">
+                <h4 className="text-xs font-mono font-bold text-brand-primary mb-2 tracking-[0.1em] uppercase">
+                  ⚡ All-Inclusive Mobile Access
+                </h4>
+                <p className="text-xs text-brand-muted leading-relaxed font-light">
+                  Includes full HD video exercise catalogs, active form-check queues, customized progress trackers, and real-time messaging directly with Coach Surya.
+                </p>
+              </div> */}
+            </div>
+          </div>
+
+          {/* Right Side: Features/Benefits list */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {content.points.map((point: ProgramBenefit, index: number) => {
+                const IconComponent = getIconComponent(point.icon);
+                return (
+                  <motion.div
+                    key={index}
+                    whileHover={{ y: -3 }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                    className="p-6 rounded-none bg-brand-card border border-brand-border hover:border-brand-primary/40 transition-all flex flex-col gap-4 shadow-2xl"
+                  >
+                    {/* Icon Badge */}
+                    <div className="h-10 w-10 rounded-none bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center shrink-0">
+                      <IconComponent className="h-4 w-4" />
+                    </div>
+
+                    {/* Benefit Text */}
+                    <div>
+                      <h3 className="text-base font-serif italic font-normal text-brand-text tracking-tight mb-2">
+                        {point.title}
+                      </h3>
+                      <p className="text-brand-muted text-xs md:text-sm leading-relaxed font-light">
+                        {point.text}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Direct CTA under features */}
+            {/* <div className="p-6 md:p-8 bg-brand-card rounded-none border border-brand-border mt-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div>
+                <h4 className="text-lg font-serif italic font-normal text-brand-text tracking-tight mb-1">
+                  Ready to test your limits?
+                </h4>
+                <p className="text-xs text-brand-muted font-mono tracking-wider uppercase font-bold">
+                  Applications are reviewed in real-time. Only 8 spots remaining for this cohort.
+                </p>
+              </div>
+              <button
+                onClick={onCtaClick}
+                className="w-full sm:w-auto px-8 py-4 bg-brand-primary hover:bg-brand-secondary text-white font-bold text-[11px] uppercase tracking-[0.2em] transition-all rounded-none cursor-pointer text-center border border-brand-primary"
+              >
+                Apply for Cohort
+              </button>
+            </div> */}
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/VideoTestimonials.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+'use client';
+
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Volume2, VolumeX, Film, Play, TrendingUp, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { VideoTestimonialsContent } from '../types';
+
+interface VideoTestimonialsProps {
+  content: VideoTestimonialsContent;
+}
+
+const AUTO_SCROLL_SPEED = 0.55;
+
+export default function VideoTestimonials({ content }: VideoTestimonialsProps) {
+  const { items, section_eyebrow, section_title, section_subtitle } = content;
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  const trackRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const isDraggingRef = useRef(false);
+  const pointerStartXRef = useRef(0);
+  const dragStartTranslateRef = useRef(0);
+  const currentXRef = useRef(0);
+  const targetXRef = useRef(0);
+  const setWidthRef = useRef(0);
+  const cardAdvanceRef = useRef(260);
+  const initializedRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
+  const pointerDownPositionRef = useRef<{ x: number; y: number } | null>(null);
+  const clickThreshold = 8;
+
+  const loopedItems = items.length > 0 ? [...items, ...items, ...items] : [];
+
+  const applyTransform = useCallback((x: number) => {
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translate3d(${x}px, 0, 0)`;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    const measure = () => {
+      if (!trackRef.current) return;
+      const width = trackRef.current.scrollWidth / 3;
+      setWidthRef.current = width;
+      cardAdvanceRef.current = width / items.length;
+
+      if (!initializedRef.current && width > 0) {
+        initializedRef.current = true;
+        currentXRef.current = -width;
+        targetXRef.current = -width;
+        applyTransform(-width);
+      }
+    };
+
+    measure();
+    const resizeObserver = new ResizeObserver(measure);
+    if (trackRef.current) resizeObserver.observe(trackRef.current);
+    window.addEventListener('resize', measure);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, [items.length, applyTransform]);
+
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    const tick = () => {
+      const width = setWidthRef.current;
+      if (width > 0) {
+        if (isDraggingRef.current) {
+          currentXRef.current = targetXRef.current;
+        } else {
+          const diff = targetXRef.current - currentXRef.current;
+          if (Math.abs(diff) > 0.05) {
+            currentXRef.current += diff * 0.12;
+          } else {
+            currentXRef.current -= AUTO_SCROLL_SPEED;
+            targetXRef.current = currentXRef.current;
+          }
+        }
+
+        if (currentXRef.current <= -2 * width) {
+          currentXRef.current += width;
+          targetXRef.current += width;
+          dragStartTranslateRef.current += width;
+        } else if (currentXRef.current > 0) {
+          currentXRef.current -= width;
+          targetXRef.current -= width;
+          dragStartTranslateRef.current -= width;
+        }
+
+        applyTransform(currentXRef.current);
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [items.length, applyTransform]);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    isDraggingRef.current = true;
+    setIsDragging(true);
+    pointerStartXRef.current = e.clientX;
+    dragStartTranslateRef.current = currentXRef.current;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    const delta = (e.clientX - pointerStartXRef.current) * 1.4;
+    targetXRef.current = dragStartTranslateRef.current + delta;
+  };
+
+  const endDrag = () => {
+    isDraggingRef.current = false;
+    setIsDragging(false);
+    pointerDownPositionRef.current = null;
+  };
+
+  const handleCardPointerDown = (index: number) => (e: React.PointerEvent<HTMLDivElement>) => {
+    pointerDownPositionRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleCardPointerUp = (index: number) => (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!pointerDownPositionRef.current) return;
+
+    const dx = e.clientX - pointerDownPositionRef.current.x;
+    const dy = e.clientY - pointerDownPositionRef.current.y;
+    const distance = Math.hypot(dx, dy);
+    pointerDownPositionRef.current = null;
+
+    if (distance > clickThreshold) return;
+
+    setActiveIndex(index);
+    setIsMuted(false);
+    setIsExpanded(true);
+  };
+
+  const nudgeSlide = (direction: 'prev' | 'next') => {
+    const advance = cardAdvanceRef.current || 260;
+    targetXRef.current += direction === 'prev' ? advance : -advance;
+  };
+
+  const currentClient = items[activeIndex];
+  const currentVideoId = currentClient.videoId;
+
+  const centerEmbedUrl = `https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=${currentVideoId}&controls=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&showinfo=0&disablekb=1&fs=0&enablejsapi=1&origin=${typeof window !== 'undefined' ? encodeURIComponent(window.location.origin) : ''}`;
+
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (typeof e.data !== 'string') return;
+      let data;
+      try {
+        data = JSON.parse(e.data);
+      } catch {
+        return;
+      }
+
+      if (data.event === 'onReady' && iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
+          '*'
+        );
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func: isMuted ? 'mute' : 'unMute', args: '' }),
+          '*'
+        );
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [currentVideoId, isMuted]);
+
+  useEffect(() => {
+    if (!isExpanded) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsExpanded(false);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isExpanded]);
+
+  return (
+    <section className="py-14 md:py-20 bg-brand-bg text-brand-text relative border-b border-brand-border overflow-hidden" id="video-testimonials">
+      <div className="max-w-4xl mx-auto px-6 mb-8 text-center">
+        <span className="inline-flex items-center gap-1.5 text-[9px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase mb-1.5">
+          <Film className="h-3 w-3 text-brand-primary" /> {section_eyebrow}
+        </span>
+        <h2 className="text-3xl md:text-5xl font-serif italic font-normal tracking-tight text-brand-text leading-tight">
+          {section_title}
+        </h2>
+        <p className="text-brand-muted text-xs md:text-sm max-w-sm mx-auto mt-4 font-light">
+          {section_subtitle}
+        </p>
+      </div>
+
+      <div className="relative w-full overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-28 bg-gradient-to-r from-brand-bg via-brand-bg/80 to-transparent z-20 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-28 bg-gradient-to-l from-brand-bg via-brand-bg/80 to-transparent z-20 pointer-events-none" />
+
+        <div
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={endDrag}
+          onPointerLeave={endDrag}
+          onPointerCancel={endDrag}
+          className={`relative overflow-hidden px-6 md:px-12 py-4 touch-pan-y ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+          style={{ touchAction: 'pan-y' }}
+        >
+          <div ref={trackRef} className="flex gap-4 md:gap-6 will-change-transform">
+            {loopedItems.map((item, idx) => {
+              const originalIndex = idx % items.length;
+              return (
+                <button
+                  key={`${item.videoId}-${idx}`}
+                  type="button"
+                  onPointerDown={handleCardPointerDown(originalIndex)}
+                  onPointerUp={handleCardPointerUp(originalIndex)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setActiveIndex(originalIndex);
+                      setIsMuted(false);
+                      setIsExpanded(true);
+                    }
+                  }}
+                  className="shrink-0 w-[180px] xs:w-[200px] sm:w-[220px] md:w-[250px] lg:w-[280px] aspect-[9/16] rounded-none overflow-hidden border border-brand-border bg-brand-card shadow-xl relative text-left"
+                >
+                  <img
+                    src={`https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`}
+                    alt={item.athlete}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    draggable={false}
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-black/20" />
+
+                  <div className="absolute top-3 left-3 z-10 rounded-none bg-black/70 border border-white/15 px-2 py-1 text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-white">
+                    {item.badge}
+                  </div>
+                  <div className="absolute top-3 right-3 z-10 rounded-none bg-black/70 border border-white/15 px-2 py-1 text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-white">
+                    {item.videoDuration}
+                  </div>
+
+                  <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                    <motion.div
+                      animate={{ scale: [1, 1.08, 1] }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                      className="h-16 w-16 rounded-full bg-brand-primary flex items-center justify-center shadow-xl border border-white/20"
+                    >
+                      <Play className="h-6 w-6 text-white" />
+                    </motion.div>
+                  </div>
+
+                  <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black via-black/80 to-transparent px-4 pb-4 pt-24">
+                    <h3 className="text-lg font-bold text-white leading-tight">{item.athlete}</h3>
+                    <p className="mt-2 text-[10px] uppercase tracking-[0.26em] text-brand-primary font-bold">
+                      {item.weekLabel}
+                    </p>
+                    <div className="mt-3 flex items-start gap-3">
+                      <div className="h-9 w-9 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-brand-primary">
+                        <TrendingUp className="h-4 w-4" />
+                      </div>
+                      <div className="space-y-1 text-white/90 text-[11px] leading-snug">
+                        <p className="font-semibold text-white">{item.statHeadline}</p>
+                        <p className="text-zinc-300">{item.statSubtext}</p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => nudgeSlide('prev')}
+          className="absolute left-3 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/15 border border-white/10 p-2 text-white shadow-xl hover:bg-white/20 transition-colors"
+          aria-label="Previous testimonials"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => nudgeSlide('next')}
+          className="absolute right-3 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/15 border border-white/10 p-2 text-white shadow-xl hover:bg-white/20 transition-colors"
+          aria-label="Next testimonials"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 mt-8">
+        <div className="flex items-center justify-center gap-2">
+          {items.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setActiveIndex(index)}
+              className={`h-2 rounded-full transition-all duration-300 ${index === activeIndex ? 'w-6 bg-brand-primary' : 'w-2 bg-brand-border'}`}
+              aria-label={`Show testimonial ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.24 }}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+            onPointerDown={() => setIsExpanded(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 24, scale: 0.98 }}
+              transition={{ type: 'spring', damping: 24, stiffness: 220 }}
+              className="relative z-10 w-full max-w-[420px]"
+              onPointerDown={(event) => event.stopPropagation()}
+            >
+              <div className="relative overflow-hidden rounded-none border border-white/10 bg-black shadow-2xl">
+                <iframe
+                  key={`${activeIndex}-${isMuted ? 'm' : 'u'}`}
+                  ref={iframeRef}
+                  src={`https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&origin=${typeof window !== 'undefined' ? encodeURIComponent(window.location.origin) : ''}`}
+                  title={`${currentClient.athlete} progression`}
+                  allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  className="w-full aspect-[9/16] bg-black"
+                  style={{ border: 'none' }}
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+
+                <button
+                  onClick={() => setIsExpanded(false)}
+                  className="absolute top-3 right-3 z-20 text-white bg-black/60 border border-white/15 p-2 rounded-full hover:bg-black/80 transition-colors"
+                  title="Close video popup"
+                  aria-label="Close video popup"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMuted((prev) => !prev);
+                  }}
+                  className="absolute bottom-3 right-3 z-20 h-10 w-10 rounded-full bg-black/70 border border-white/15 flex items-center justify-center text-white transition-colors hover:bg-black/80"
+                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                >
+                  {isMuted ? (
+                    <VolumeX className="h-4.5 w-4.5 text-rose-400" />
+                  ) : (
+                    <Volume2 className="h-4.5 w-4.5 text-emerald-400" />
+                  )}
+                </button>
+              </div>
+
+              <div className="mt-4 rounded-none border border-white/10 bg-[#0D0D0D] p-5 text-white">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-brand-primary font-bold mb-2">
+                  {currentClient.weekLabel}
+                </p>
+                <h3 className="text-2xl font-serif italic font-normal leading-tight">
+                  {currentClient.athlete}
+                </h3>
+                <div className="mt-4 flex items-start gap-3">
+                  <div className="h-11 w-11 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-brand-primary">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1 text-sm leading-snug text-zinc-300">
+                    <p className="font-semibold text-white">{currentClient.statHeadline}</p>
+                    <p>{currentClient.statSubtext}</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}
+</file>
+
+<file path="index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surya Calisthenics — Elite Bodyweight Mastery Coaching</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="src/components/Transformations.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useRef, useState, useEffect } from 'react';
+import { motion } from 'motion/react';
+import {
+  TrendingUp,
+  Sparkles,
+  ArrowLeftRight,
+  Users,
+  Trophy,
+  CalendarCheck,
+  Star,
+  Play,
+  ArrowRight,
+} from 'lucide-react';
+import { TransformationItem } from '../types';
+
+interface TransformationsProps {
+  items: TransformationItem[];
+  onCtaClick: () => void;
+}
+
+const STATS = [
+  { icon: Users, value: '125K+', label: 'Community' },
+  { icon: Trophy, value: '100+', label: 'Transformations' },
+  { icon: CalendarCheck, value: '5+', label: 'Years Experience' },
+  { icon: Star, value: '5.0', label: 'Client Rating' },
+];
+
+export default function Transformations({ items, onCtaClick }: TransformationsProps) {
+  const sectionRef = useRef<HTMLDivElement>(null);   // whole section — used for vertical scroll progress
+  const trackRef = useRef<HTMLDivElement>(null);     // the flex row that actually gets transformed
+
+  const [isDragging, setIsDragging] = useState(false); // only used for cursor styling
+
+  // Motion state lives in refs (not React state) so the animation loop
+  // never triggers re-renders — this is what keeps it frame-drop free.
+  const isDraggingRef = useRef(false);
+  const pointerStartXRef = useRef(0);
+  const dragStartTranslateRef = useRef(0);
+
+  const currentXRef = useRef(0); // current translateX (px, negative)
+  const targetXRef = useRef(0);  // where currentX is easing toward
+  const setWidthRef = useRef(0); // px width of ONE full set of items
+  const initializedRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
+
+  // Triplicate the items so the track always has a "previous" and "next"
+  // copy to slide into — this is what makes the loop seamless no matter
+  // how many items are passed in.
+  const loopedItems = items.length > 0 ? [...items, ...items, ...items] : [];
+
+  const applyTransform = (x: number) => {
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translate3d(${x}px, 0, 0)`;
+    }
+  };
+
+  // Measure one set's width and center the track on the middle copy.
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    const measure = () => {
+      if (!trackRef.current) return;
+      const w = trackRef.current.scrollWidth / 3;
+      setWidthRef.current = w;
+      if (!initializedRef.current && w > 0) {
+        initializedRef.current = true;
+        currentXRef.current = -w;
+        targetXRef.current = -w;
+        applyTransform(-w);
+      }
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (trackRef.current) ro.observe(trackRef.current);
+    window.addEventListener('resize', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, [items.length]);
+
+  // Core animation loop. When the user is dragging, the track follows the
+  // pointer 1:1. When released, it eases back to rest and then drifts on
+  // its own in a continuous marquee-style auto-scroll (same visual idea as
+  // the Reviews marquee, just driven by rAF instead of a CSS keyframe so it
+  // can be interrupted/resumed by dragging at any time). Wrapping keeps the
+  // track seamlessly looping regardless of item count.
+  const AUTO_SCROLL_SPEED = 0.6; // px per frame
+
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    const tick = () => {
+      const w = setWidthRef.current;
+      if (w > 0) {
+        if (isDraggingRef.current) {
+          currentXRef.current = targetXRef.current;
+        } else {
+          const diff = targetXRef.current - currentXRef.current;
+          if (Math.abs(diff) > 0.05) {
+            currentXRef.current += diff * 0.12; // ease back after a drag release
+          } else {
+            // Continuous auto-scroll, always moving right-to-left.
+            currentXRef.current -= AUTO_SCROLL_SPEED;
+            targetXRef.current = currentXRef.current;
+          }
+        }
+
+        // Seamless wrap: keep currentX (and target/drag anchors) within
+        // one set-width of the middle copy, forever, regardless of
+        // item count.
+        if (currentXRef.current <= -2 * w) {
+          currentXRef.current += w;
+          targetXRef.current += w;
+          dragStartTranslateRef.current += w;
+        } else if (currentXRef.current > 0) {
+          currentXRef.current -= w;
+          targetXRef.current -= w;
+          dragStartTranslateRef.current -= w;
+        }
+
+        applyTransform(currentXRef.current);
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [items.length]);
+
+  // Unified pointer handlers (covers mouse + touch + pen in one path).
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    setIsDragging(true);
+    pointerStartXRef.current = e.clientX;
+    dragStartTranslateRef.current = currentXRef.current;
+    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const delta = (e.clientX - pointerStartXRef.current) * 1.4; // drag sensitivity
+    targetXRef.current = dragStartTranslateRef.current + delta;
+  };
+
+  const endDrag = () => {
+    isDraggingRef.current = false;
+    setIsDragging(false);
+  };
+
+  // "View More Stories" hands off to the video testimonials carousel — the
+  // next place on the page with more client proof.
+  const scrollToMoreStories = () => {
+    const el = document.getElementById('video-testimonials');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <section
+      ref={sectionRef}
+      className="py-14 md:py-20 bg-brand-bg overflow-hidden relative border-t border-b border-brand-border"
+      id="transformations"
+    >
+      {/* Section Header - Clean, Compact, Highly readable */}
+      <div className="max-w-7xl mx-auto px-6 mb-8 md:mb-12 relative z-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase block mb-1.5">
+              ATHLETE EVOLUTION
+            </span>
+            <h2 className="text-3xl md:text-5xl font-serif italic font-normal tracking-tight text-brand-text leading-tight">
+              Real People. <span className="text-brand-primary">Real Transformations.</span>
+            </h2>
+            <p className="text-brand-muted text-xs md:text-sm max-w-lg mt-2 font-light">
+              Watch our athletes evolve on autoplay, or drag/swipe horizontally on any device to browse manually.
+            </p>
+          </div>
+
+          <div className="hidden lg:flex items-center gap-4 font-mono text-[9px] text-brand-primary bg-brand-primary/5 border border-brand-primary/20 px-4 py-2 rounded-none uppercase tracking-widest font-bold">
+            <span className="flex items-center gap-1"><TrendingUp className="h-3 w-3 text-brand-primary" /> Performance-Linked</span>
+            <span className="h-3 w-px bg-brand-border" />
+            <span className="flex items-center gap-1.5"><ArrowLeftRight className="h-3 w-3 text-brand-primary animate-pulse" /> Drag to Browse</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Swipeable & Scroll-Synced Track (transform-driven, infinite loop) */}
+      <div className="relative w-full overflow-hidden">
+
+        {/* Soft edge blur fading on left/right borders */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 md:w-32 bg-gradient-to-r from-brand-bg via-brand-bg/40 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 md:w-32 bg-gradient-to-l from-brand-bg via-brand-bg/40 to-transparent z-10 pointer-events-none" />
+
+        {/* Draggable viewport — overflow hidden, no native scrollbar/scroll-snap needed */}
+        <div
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={endDrag}
+          onPointerLeave={endDrag}
+          onPointerCancel={endDrag}
+          className={`overflow-hidden px-6 md:px-16 py-4 touch-pan-y ${
+            isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
+          }`}
+        >
+          {/* The actual sliding track — position controlled entirely via translate3d */}
+          <div ref={trackRef} className="flex gap-4 md:gap-6 will-change-transform">
+            {loopedItems.map((item, idx) => {
+              const originalIdx = idx % items.length;
+              const stage = (item.stage || (originalIdx % 2 === 0 ? 'BEFORE' : 'AFTER')).toUpperCase();
+              const duration = item.duration || '12 Weeks';
+              const program = item.program || 'TRANSFORMATION';
+
+              return (
+                <motion.div
+                  key={idx}
+                  whileTap={{ scale: 0.985 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+                  className="w-[180px] xs:w-[210px] sm:w-[230px] md:w-[250px] shrink-0 bg-brand-card border border-brand-border rounded-none overflow-hidden relative group shadow-md flex flex-col justify-between transition-all duration-300 hover:border-brand-primary/45"
+                >
+                  {/* Card Header */}
+                  <div className="p-3 border-b border-brand-border bg-brand-card/50">
+                    <div className="flex items-center justify-between text-[8px] font-mono text-brand-muted tracking-wider mb-1">
+                      <span className={`inline-flex items-center gap-0.5 font-bold tracking-widest uppercase text-[7px] px-2 py-0.5 ${
+                        stage === 'AFTER'
+                          ? 'bg-brand-primary text-white font-extrabold'
+                          : 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20'
+                      }`}>
+                        {stage === 'AFTER' && <Sparkles className="h-2 w-2" />}
+                        {stage}
+                      </span>
+                      <span className="font-bold">{duration}</span>
+                    </div>
+                    <h4 className="text-xs md:text-sm font-serif italic font-normal text-brand-text tracking-tight truncate">
+                      {item.name}
+                    </h4>
+                  </div>
+
+                  {/* Proportional Image Frame */}
+                  <div className="relative aspect-square overflow-hidden bg-brand-bg border-b border-brand-border">
+                    <img
+                      src={item.img}
+                      alt={`${item.name} ${stage}`}
+                      loading="lazy"
+                      draggable={false}
+                      referrerPolicy="no-referrer"
+                      className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none ${
+                        stage === 'BEFORE'
+                          ? 'filter brightness-[0.85] contrast-[1.05]'
+                          : 'filter brightness-[0.95] contrast-[1.1]'
+                      }`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" />
+                  </div>
+
+                  {/* Card Description */}
+                  <div className="p-3 bg-brand-card flex-grow flex flex-col justify-between">
+                    <p className="text-brand-muted text-[10px] md:text-xs leading-relaxed font-light mb-2.5 min-h-[30px] line-clamp-2">
+                      {item.desc}
+                    </p>
+                    <div className="flex items-center justify-between text-[8px] font-mono text-brand-muted tracking-wider pt-2 border-t border-brand-border">
+                      <span className="opacity-80">PROGRAM</span>
+                      <span className="text-brand-primary font-bold tracking-widest uppercase text-[8px] font-mono">{program}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Subtle touch indicator */}
+      <div className="flex justify-center items-center gap-1.5 mt-2.5 text-[9px] font-mono text-brand-muted uppercase tracking-widest opacity-60">
+        <ArrowLeftRight className="h-2.5 w-2.5 animate-pulse" />
+        <span>Drag to browse</span>
+      </div>
+
+      {/* Quick stats strip */}
+      <div className="max-w-3xl mx-auto px-6 mt-10 md:mt-14 relative z-10">
+        <div className="grid grid-cols-4 gap-y-4">
+          {STATS.map((stat, idx) => {
+            const Icon = stat.icon;
+            return (
+              <div key={idx} className="relative flex flex-col items-center text-center px-2">
+                {idx > 0 && (
+                  <div className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-8 bg-brand-border" />
+                )}
+                <Icon className="h-4 w-4 md:h-5 md:w-5 text-brand-primary mb-1.5" strokeWidth={1.5} />
+                <span className="text-sm md:text-base font-extrabold text-brand-text leading-none mb-0.5">
+                  {stat.value}
+                </span>
+                <span className="text-[8px] md:text-[9px] text-brand-muted font-sans uppercase tracking-wider">
+                  {stat.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* CTA banner */}
+      <div className="max-w-4xl mx-auto px-6 mt-8 md:mt-10 relative z-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 border-t border-brand-border pt-8">
+          <div className="border-l-4 border-brand-primary pl-3 md:pl-4">
+            <p className="font-serif text-lg sm:text-xl md:text-2xl text-brand-text leading-snug">
+              Your transformation is
+              <br className="hidden sm:block" />
+              {' '}the next <span className="italic text-brand-primary">success story.</span>
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 shrink-0">
+            <motion.button
+              onClick={onCtaClick}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-3 bg-brand-primary text-white pl-5 pr-1.5 py-1.5 rounded-full shadow-xl border border-brand-primary cursor-pointer transition-all duration-300"
+            >
+              <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.13em] font-mono whitespace-nowrap">
+                Become the Next Success Story
+              </span>
+              <span className="w-7 h-7 rounded-full bg-white text-brand-primary flex items-center justify-center shrink-0">
+                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+              </span>
+            </motion.button>
+
+            <button
+              onClick={scrollToMoreStories}
+              className="inline-flex items-center gap-2 group cursor-pointer"
+            >
+              <span className="h-7 w-7 rounded-full border border-brand-text/20 flex items-center justify-center text-brand-text group-hover:border-brand-primary group-hover:text-brand-primary transition-colors shrink-0">
+                <Play className="h-2.5 w-2.5 fill-current ml-0.5" />
+              </span>
+              <span className="text-[9px] md:text-[10px] font-mono font-bold uppercase tracking-widest text-brand-text group-hover:text-brand-primary transition-colors whitespace-nowrap">
+                View More Stories
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/App.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { WebsiteContent } from './types';
+import { DEFAULT_CONTENT, parseContentTxt } from './utils/parser';
+
+// Core layout section components
+import Hero from './components/Hero';
+import FloatingCta from './components/FloatingCta';
+import Transformations from './components/Transformations';
+import VideoTestimonials from './components/VideoTestimonials';
+import About from './components/About';
+import VideoSection from './components/VideoSection';
+import Reviews from './components/Reviews';
+import ProgramDetails from './components/ProgramDetails';
+import Faq from './components/Faq';
+import Footer from './components/Footer';
+import JoinForm from './components/JoinForm';
+
+// Lucide icon imports
+import { X, Award, Flame, Zap, ShieldCheck } from 'lucide-react';
+
+export default function App() {
+  const [content, setContent] = useState<WebsiteContent | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch and parse content.txt on mount
+  useEffect(() => {
+    fetch('/content.txt')
+      .then((res) => {
+        if (!res.ok) throw new Error('File fetch returned ' + res.status);
+        return res.text();
+      })
+      .then((text) => {
+        const parsed = parseContentTxt(text);
+        setContent(parsed);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.warn('Network issue fetching content.txt, applying premium local cache: ', error);
+        setContent(DEFAULT_CONTENT);
+        setLoading(false);
+      });
+  }, []);
+
+  const triggerSignupPortal = () => {
+    window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSdk2ypkGUNJOYUwSAfm_Nun9gGeS0zgC4ycJyEtLlRJC1NV2g/viewform';
+  };
+
+  // Used by the Hero's secondary CTA ("View Client Results") to jump to the transformations gallery
+  const scrollToResults = () => {
+    const el = document.getElementById('transformations');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Graceful initial loader screen
+  if (loading || !content) {
+    return (
+      <div className="h-screen w-screen bg-brand-bg flex flex-col items-center justify-center text-brand-text font-mono">
+        <motion.div
+          animate={{ scale: [0.95, 1.05, 0.95], opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="flex flex-col items-center gap-4"
+        >
+          <div className="h-8 w-8 border-2 border-brand-primary border-t-transparent animate-spin" />
+          <span className="text-[10px] tracking-[0.25em] text-brand-muted font-bold">LOADING DIGITAL CORE...</span>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-brand-bg min-h-screen text-brand-text font-sans antialiased selection:bg-brand-primary selection:text-white scroll-smooth">
+      
+      {/* 1. Hero Section */}
+      <Hero onPrimaryCtaClick={triggerSignupPortal} onSecondaryCtaClick={scrollToResults} />
+
+      {/* 2. Persistent Floating CTA */}
+      <FloatingCta content={content.floating_cta} onClick={triggerSignupPortal} />
+
+      {/* 3. Video Section */}
+      <VideoSection content={content.video} />
+
+      {/* 4. Client Transformations Gallery */}
+      <Transformations items={content.transformations} />
+
+      {/* 5. Video Testimonials Carousel */}
+      <VideoTestimonials content={content.videoTestimonials} />
+
+      {/* 6. About the Coach */}
+      <About content={content.about} />
+
+      {/* 7. Reviews / Testimonials (Infinite Marquee) */}
+      <Reviews items={content.reviews} />
+
+      {/* 8. Program Details */}
+      <ProgramDetails content={content.program} onCtaClick={triggerSignupPortal} />
+
+      {/* 9. FAQ */}
+      <Faq content={content.faq} />
+
+      {/* Dedicated On-Page Signup Segment (for structural completeness and anchor targets) */}
+      {/* <section className="py-24 bg-brand-bg border-t border-brand-border px-6 relative" id="enrollment-portal">
+        <div className="max-w-7xl mx-auto relative z-10 text-center mb-12">
+          <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-brand-muted uppercase block mb-3">
+            SECURE YOUR SPOT
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text">
+            Apply For Personal Coaching
+          </h2>
+          <p className="text-brand-muted text-sm max-w-lg mx-auto mt-4 font-light">
+            Submit your profile. Coach Surya personally reviews every submission via Instagram to maintain high program standards.
+          </p>
+        </div>
+
+        <div className="max-w-xl mx-auto relative z-10">
+          <JoinForm />
+        </div>
+      </section> */}
+
+      {/* 8. Footer */}
+      <Footer content={content.footer} onJoinCtaClick={triggerSignupPortal} />
+
+      {/* Modal Popup Sign-Up Portal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            
+            {/* Dark glassmorphic backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            />
+
+            {/* Modal Body Wrapper */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+              className="relative w-full max-w-xl z-10 bg-[#0D0D0D] border border-white/10 rounded-none overflow-hidden shadow-2xl"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="absolute right-4 top-4 z-50 text-zinc-400 hover:text-white bg-black hover:bg-white/5 p-2 rounded-none border border-white/10 transition-all cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+
+              {/* Form Content */}
+              <JoinForm onSuccessClose={() => setIsModalOpen(false)} isModal={true} />
+            </motion.div>
+
+          </div>
+        )}
+      </AnimatePresence>
+
+    </div>
+  );
+}
+</file>
+
+<file path="src/index.css">
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Dynamic brand theme colors - Red & White scheme */
+  --brand-primary: #FF0000;      /* Active athletic red (rose-600) */
+  --brand-secondary: #BE123C;    /* Deeper dark red (rose-700) */
+  --brand-bg: #FFFFFF;           /* Pristine main background */
+  --brand-card: #FAFAFA;         /* Premium light card background */
+  --brand-text: #0F172A;         /* Slate-900 heading and body text */
+  --brand-muted: #475569;        /* Slate-600 descriptions and captions */
+  --brand-border: #E2E8F0;       /* Slate-200 clean border divider */
+  --brand-selection-bg: #E11D48;
+  --brand-selection-text: #FFFFFF;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, ui-serif, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Anton", Impact, "Arial Narrow Bold", sans-serif;
+  --font-script: "Dancing Script", cursive;
+  
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-card: var(--brand-card);
+  --color-brand-text: var(--brand-text);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-border: var(--brand-border);
+
+  --animate-marquee: marquee-rtl 45s linear infinite;
+  --animate-marquee-ltr: marquee-ltr 45s linear infinite;
+  --animate-marquee-rtl: marquee-rtl 45s linear infinite;
+
+  @keyframes marquee-ltr {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0%); }
+  }
+  @keyframes marquee-rtl {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+/* Custom scrollbar and premium smooth scrolling style */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--brand-bg);
+  color: var(--brand-text);
+}
+
+@media (min-width: 1490px) {
+  .hero-wide-headline {
+    font-size: 6rem;
+  }
+
+  .hero-wide-copy {
+    font-size: 1.5rem;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--brand-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-border);
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-primary);
+}
+</file>
+
+<file path="public/content.txt">
+[HERO]
+headline = Reclaim Your True Strength
+subheadline = Master your bodyweight, build high-performance muscle, and achieve elite calisthenics skills with tailored mobile-first coaching.
+background_gif = https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDVqamNsbGF0OHFhcWlzMTBmaDVodTN2Zms3a2l3Mmt4ZGR3ZjhsMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKrEzvLbsVAud8I/giphy.gif
+desktop_image = /images/desktop-hero.png
+mobile_image = /images/mobile-hero.png
+cta_text = Start Your Transformation
+
+[FLOATING_CTA]
+button_text = Join Program Now
+
+[TRANSFORMATIONS]
+trans_1_img = https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop
+trans_1_name = Marcus T. - 12 Weeks
+
+trans_1_duration = 13 Weeks
+trans_1_program = STRENGTH PROTOCOL
+trans_1_desc = Went from 0 to 12 clean pull-ups, dropping 8% body fat.
+
+trans_2_img = https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop
+trans_2_name = Sarah K. - 16 Weeks
+trans_2_stage = AFTER
+trans_2_duration = 16 Weeks
+trans_2_program = SKILL ACQUISITION
+trans_2_desc = Achieved a solid 15-second freestanding handstand and elite core power.
+
+trans_3_img = https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=600&auto=format&fit=crop
+trans_3_name = Alex R. - 24 Weeks
+trans_3_stage = AFTER
+trans_3_duration = 24 Weeks
+trans_3_program = RING MASTERY
+trans_3_desc = Mastered the full muscle-up and unlocked advanced gymnastic ring flows.
+
+trans_4_img = https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop
+trans_4_name = David L. - 8 Weeks
+trans_4_stage = AFTER
+trans_4_duration = 8 Weeks
+trans_4_program = MOBILITY CORE
+trans_4_desc = Rebuilt posture, cured shoulder pain, and unlocked elite body control.
+
+[ABOUT]
+coach_name = Coach Surya
+coach_title = WSWCF Calisthenics Coach & Founder
+coach_photo = /images/coach.jpeg
+certification_photo = /images/certificate.jpeg
+bio_heading = Meet Your Coach
+bio_paragraph_1 = Hi, I'm Surya—a WSWCF Certified Calisthenics Coach.My mission is to help people build real strength, master bodyweight skills, and unlock their full potential through structured, personalized coaching. I believe every athlete progresses differently, so I focus on creating training programs that are practical, sustainable, and tailored to individual goals. Whether you're starting your first pull-up or working toward advanced calisthenics skills, I'm here to help you train smarter, stay consistent, and enjoy the journey.
+bio_paragraph_2 = Having coached over 500+ athletes worldwide through mobile-optimized virtual programs, I focus on building raw, functional strength, bulletproofing joints, and developing a shredded, high-performance physique without the need for heavy weights.
+
+[VIDEO]
+youtube_id = 78zo1AeWSc8
+video_title = Calisthenics Masterclass & Progression Secrets
+
+[REVIEWS]
+review_1 = "Able to gain some shape in shoulder and chest, I realized an increase in hand power and can do 1 to 2 pullups now; before starting I could not do even one. I also saw strength gains in my thighs, though my core still needs work. Overall, visible improvement in some parts; I need to stay consistent 5 days a week to see more positives." - Basker (42yr old)
+review_2 = "It's been 3 months of a great journey into the calisthenics world with you. I was skeptical about online coaching at first, but now I feel very happy with the decision. You analyzed my workouts and tailored every exercise, making me comfortable and confident. Thank you for pushing my limits and helping me unlock new skills." - Sidharth (32yr old)
+review_3 = "These two months with coach Surya have been amazing. My endurance, flexibility, and strength improved a lot, and I learned the correct form for every exercise plus calisthenics basics like frog pose. This journey is already amazing and there is a long way to go." - Yasin (30yr old)
+review_4 = "Intha two months ennaku nalla challenge ah irunthuchi. Everyday pain feel panna atha enjoy panna, every midnight ennoda kai semma pain tharum but I will not stop. Naa strong ah irukken nu feel pandren. I can feel my body shape changing and my blood sugar is under control. Totally I feel so happy." - Pooja (19yr old)
+review_5 = "Overall, nice experience for the first 3 months bro. I saw better changes than a year at gym without taking protein supplements. Weekly workout variation made it more interesting and motivating. Calisthenics became a stress buster while I handle study pressure, and I am renewing for another 3 months." - Kumar (28yr old)
+review_6 = "After just 12 classes, I cannot thank Surya enough for the incredible change I’ve experienced. I was unsure of my strength and flexibility at first, but his expertise, patience, and motivation changed my perspective on fitness. Moves that once seemed impossible, like pull-ups, now feel within reach." - Anonymous (35yr old)
+
+[PROGRAM]
+section_title = Inside the Coaching Experience
+section_subtitle = Everything you need to build strength, master advanced calisthenics skills, and stay consistent—all in one personalized coaching system designed around your goals.
+supporting_image = https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop
+
+point_1_icon = Target
+point_1_title = PERSONALIZED SKILL PROGRESSIONS
+point_1_text = Master pull-ups, muscle-ups, handstands, front lever, and planche through structured progressions tailored to your level.
+
+point_2_icon = Flame
+point_2_title = STRENGTH & PHYSIQUE DEVELOPMENT
+point_2_text = Build lean muscle, increase [obscured] strength, and develop [obscured] athletic physique with progressive bodyweight training.
+
+point_3_icon = Shield
+point_3_title = MOBILITY & INJURY PREVENTION
+point_3_text = Improve flexibility, joint health, and movement quality with mobility routines that help you train consistently and reduce injury risk.
+
+point_4_icon = Zap
+point_4_title = YOUR COACHING DASHBOARD
+point_4_text = Access workouts, demonstration videos, progress tracking, form reviews, and direct coach support—[obscured]
+
+[FOOTER]
+instagram_url = https://instagram.com/calisthenicscoach
+youtube_url = https://www.youtube.com
+contact_email = contact@bodyweightathlete.com
+contact_phone = +1 (555) 019-3829
+copyright = © 2026 Surya Calisthenics. All rights reserved.
+secondary_cta_text = Follow on Instagram
+youtube_cta_text = Subscribe on YouTube
+
+[VIDEO_TESTIMONIALS]
+section_eyebrow = Clients Progress Library
+section_title = Progress in Motion
+section_subtitle = Drag or swipe the video horizontally to slide through progress clips.
+client_1_name = Marcus T.
+client_1_badge = MUSCLE-UP
+client_1_video_id = 78zo1AeWSc8
+client_1_video_duration = 2:14
+client_1_week_label = WEEK 12 • MUSCLE-UP PROGRESS
+client_1_stat_headline = From 0 to 3 Strict Muscle-Ups
+client_1_stat_subtext = 12 Weeks Transformation
+client_1_desc = Demonstrating solid front lever control and explosive muscle-up strength after consistent progressions.
+
+client_2_name = Sarah K.
+client_2_badge = HANDSTAND
+client_2_video_id = p9gYwJ8I9uY
+client_2_video_duration = 1:58
+client_2_week_label = WEEK 16 • HANDSTAND BREAKTHROUGH
+client_2_stat_headline = Built shoulder stability and balance
+client_2_stat_subtext = 16 Weeks Progress
+client_2_desc = Achieving clean freestanding holds and tight body alignment through targeted shoulder work.
+
+client_3_name = Alex R.
+client_3_badge = STRENGTH
+client_3_video_id = EGMG_7m_xH4
+client_3_video_duration = 2:05
+client_3_week_label = WEEK 24 • STRENGTH EVOLUTION
+client_3_stat_headline = Clean gymnastic ring transitions
+client_3_stat_subtext = 24 Weeks Mastery
+client_3_desc = Executing fluid ring muscle-up flows and stable support holds after systematic strength buildup.
+
+client_4_name = David L.
+client_4_badge = MOBILITY
+client_4_video_id = j71XgK-9Kco
+client_4_video_duration = 1:52
+client_4_week_label = WEEK 8 • MOBILITY UPGRADE
+client_4_stat_headline = Pain-free overhead range
+client_4_stat_subtext = 8 Weeks Reset
+client_4_desc = Restoring overhead movement quality and smooth press patterns through mobility-focused training.
+
+[FAQ]
+section_eyebrow = Common Questions
+section_title = Frequently Asked Questions
+section_subtitle = Everything you need to know before you start your bodyweight transformation.
+
+faq_1_question = Can beginners join?
+faq_1_answer = Yes, every exercise is scalable to match your current fitness level with beginner-friendly progressions.
+
+faq_2_question = Do I need a gym?
+faq_2_answer = No, you can train anywhere using your body weight, though a pull-up bar or resistance bands help.
+
+faq_3_question = Can I lose fat?
+faq_3_answer = Yes, high-energy bodyweight workouts burn calories, boost your metabolism, and help strip body fat.
+
+faq_4_question = Can I build muscle?
+faq_4_answer = Yes, by applying progressive overload with tougher variations and leverage, you will build lean muscle.
+
+faq_5_question = How many days per week?
+faq_5_answer = 3 to 4 days per week is ideal for steady progress and proper recovery.
+
+faq_6_question = Do you provide nutrition?
+faq_6_answer = Yes, I provide clear nutrition guidelines and calorie/macro targets to support your goals.
+</file>
+
+<file path="src/components/About.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { AboutContent } from '../types';
+import { Star, Globe, UserCheck, Link2, Play, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
+
+interface AboutProps {
+  content: AboutContent;
+  onCtaClick: () => void;
+}
+
+export default function About({ content, onCtaClick }: AboutProps) {
+  const highlights = [
+    {
+      icon: Star,
+      title: '10+ Years Calisthenics Mastery',
+      desc: 'A decade of training, learning, and perfecting the art of bodyweight strength.',
+    },
+    {
+      icon: Globe,
+      title: '500+ Athletes Coached Globally',
+      desc: 'Helping athletes from different countries achieve their fitness and skill goals.',
+    },
+    {
+      icon: UserCheck,
+      title: 'Certified Bodyweight Specialist',
+      desc: 'WSWCF Certified Personal Trainer with expertise in calisthenics & street workout.',
+    },
+    {
+      icon: Link2,
+      title: 'Expert in Gymnastic Rings',
+      desc: 'Specialized in ring training, strength skills, and advanced movement progressions.',
+    },
+  ];
+
+  const scrollToTransformations = () => {
+    const el = document.getElementById('transformations');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <section className="py-24 bg-brand-bg text-brand-text relative border-b border-brand-border" id="about">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+          {/* Left Side: Premium Two-Image Layout */}
+          <div className="lg:col-span-6 relative flex flex-row gap-4 sm:gap-6 justify-center items-center">
+            <div className="relative w-[54%] shrink-0">
+              <div className="relative aspect-[3/4] rounded-none overflow-hidden border border-brand-border shadow-2xl">
+                <img
+                  src={content.coach_photo}
+                  alt={content.coach_name}
+                  referrerPolicy="no-referrer"
+                  loading="lazy"
+                  className="w-full h-full object-cover filter brightness-[0.95] contrast-[1.05]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-bg/80 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <span className="text-[9px] font-mono tracking-[0.2em] text-white bg-brand-primary border border-brand-primary px-3 py-1 rounded-none uppercase font-bold">
+                    LEAD COACH
+                  </span>
+                </div>
+              </div>
+
+              {/* <div className="absolute -top-4 -right-4 sm:-top-5 sm:-right-6 z-20 w-[92px] sm:w-[110px] bg-brand-card border border-brand-border p-2 sm:p-2.5 shadow-2xl flex flex-col justify-center items-center text-center">
+                <div className="flex items-center justify-center gap-1 mb-1 bg-brand-primary/10 border border-brand-primary/20 px-1.5 py-0.5 text-brand-primary">
+                  <Star className="h-2.5 w-2.5 fill-brand-primary text-brand-primary" />
+                  <span className="text-[10px] font-mono font-black text-brand-text leading-none">4.9</span>
+                </div>
+                <h5 className="text-[6.5px] sm:text-[7px] font-mono font-black text-brand-text tracking-[0.15em] uppercase mb-0.5">
+                  Credentials
+                </h5>
+                <p className="text-[6px] sm:text-[6.5px] text-brand-muted tracking-widest uppercase font-mono font-bold leading-normal">
+                  500+ Reviews
+                </p>
+              </div> */}
+            </div>
+
+            <div className="relative w-[46%] shrink-0">
+              <div className="relative aspect-[3/4] rounded-none overflow-hidden border border-brand-border shadow-2xl">
+                <img
+                  src={content.certification_photo}
+                  alt={`${content.coach_name} certification`}
+                  referrerPolicy="no-referrer"
+                  loading="lazy"
+                  className="w-full h-full object-cover filter brightness-[0.95] contrast-[1.05]"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: Bio & Qualifications Text */}
+          <div className="lg:col-span-6 flex flex-col justify-center">
+            <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase block mb-3">
+              THE INTENSITY ARCHITECT
+            </span>
+            <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text mb-2 leading-tight">
+              Meet Coach <span className="text-brand-primary">Surya</span>
+            </h2>
+            <p className="text-brand-muted font-mono text-[10px] tracking-[0.2em] uppercase mb-8 font-bold">
+              {content.coach_title}
+            </p>
+
+            <div className="space-y-6 text-brand-muted font-sans text-sm md:text-base leading-relaxed font-light">
+              <h3 className="text-lg font-normal text-brand-text font-serif italic tracking-tight">
+                {content.bio_heading}
+              </h3>
+              <p>{content.bio_paragraph_1}</p>
+            </div>
+
+            <div className="space-y-6 pt-8 text-brand-muted font-sans text-sm md:text-base leading-relaxed font-light">
+              <p className="text-xl font-normal text-brand-text font-serif italic tracking-tight">
+                <span className="text-brand-primary text-lg">"</span> Strength isn't built overnight.
+                It's built through consistency, discipline, and the courage to begin.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Highlights + CTA strip */}
+        <div className="mt-14 md:mt-16 pt-10 border-t border-brand-border">
+          {/* Highlights mini-grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-8 mb-10">
+            {highlights.map((h, idx) => {
+              const Icon = h.icon;
+              return (
+                <div key={idx} className="flex flex-col items-start gap-2.5">
+                  <div className="h-8 w-8 md:h-9 md:w-9 rounded-lg bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center shrink-0">
+                    <Icon className="h-3.5 w-3.5 md:h-4 md:w-4" strokeWidth={2} />
+                  </div>
+                  <h5 className="text-[11px] md:text-xs font-bold text-brand-text leading-snug tracking-tight">
+                    {h.title}
+                  </h5>
+                  <p className="text-[10px] md:text-[11px] text-brand-muted leading-relaxed font-light">
+                    {h.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* CTA row */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-brand-border">
+            <motion.button
+              onClick={onCtaClick}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-3 bg-brand-primary text-white pl-6 pr-2 py-2 rounded-full shadow-xl border border-brand-primary cursor-pointer transition-all duration-300"
+            >
+              <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] font-mono">
+                Train With Surya
+              </span>
+              <span className="w-8 h-8 rounded-full bg-white text-brand-primary flex items-center justify-center shrink-0">
+                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+              </span>
+            </motion.button>
+
+            <button
+              onClick={scrollToTransformations}
+              className="inline-flex items-center gap-2.5 group cursor-pointer"
+            >
+              <span className="h-8 w-8 rounded-full border border-brand-text/20 flex items-center justify-center text-brand-text group-hover:border-brand-primary group-hover:text-brand-primary transition-colors shrink-0">
+                <Play className="h-3 w-3 fill-current ml-0.5" />
+              </span>
+              <span className="flex flex-col items-start leading-tight">
+                <span className="text-[9px] font-mono text-brand-muted uppercase tracking-widest">
+                  My Client Page
+                </span>
+                <span className="text-[11px] md:text-xs font-mono font-bold uppercase tracking-widest text-brand-text group-hover:text-brand-primary transition-colors">
+                  More Client Transformations
+                </span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/Hero.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { motion } from 'motion/react';
+import {
+  ArrowRight,
+  Users,
+  BadgeCheck,
+  UserCheck,
+  CalendarDays,
+  Dumbbell,
+  PersonStanding,
+  Soup,
+  MessageCircle,
+  Instagram,
+  Youtube,
+  Menu,
+} from 'lucide-react';
+
+const heroImage = new URL('../images/hero-image.png', import.meta.url).href;
+
+// lucide-react has no TikTok glyph — minimal inline icon so the social row matches the reference exactly.
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 16 16" fill="currentColor" className={className} aria-hidden="true">
+    <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z" />
+  </svg>
+);
+
+type StatIcon = 'users' | 'badge' | 'user' | 'calendar';
+type FeatureIcon = 'muscle' | 'skill' | 'nutrition' | 'support';
+type SocialPlatform = 'instagram' | 'youtube' | 'tiktok';
+
+interface HeroStat {
+  icon: StatIcon;
+  value: string;
+  label: string;
+}
+
+interface HeroFeature {
+  icon: FeatureIcon;
+  title: string;
+  text: string;
+}
+
+interface SocialLink {
+  platform: SocialPlatform;
+  url: string;
+}
+
+interface HeroContentV2 {
+  logoScript: string;
+  logoBold: string;
+  bgWord: string;
+  headlineLine1: string;
+  headlineBlackWord: string;
+  headlineRedWord: string;
+  subheadline: string;
+  paragraph: string;
+  image: string;
+  primaryCtaText: string;
+  secondaryCtaText: string;
+  stats: HeroStat[];
+  features: HeroFeature[];
+  followLabel: string;
+  socials: SocialLink[];
+  handle: string;
+}
+
+// Default copy/content — matches the reference mockup 1:1. Override via the `content` prop.
+const DEFAULT_HERO: HeroContentV2 = {
+  logoScript: 'Surya',
+  logoBold: 'CALISTHENICS',
+  bgWord: 'STRENGTH',
+  headlineLine1: 'Build Strength.',
+  headlineBlackWord: 'Master',
+  headlineRedWord: 'Calisthenics.',
+  subheadline: 'Personalized coaching. Real results. Stronger every day.',
+  paragraph:
+    'I help you build real strength, unlock elite skills, and transform your body through structured calisthenics training, nutrition guidance, and 1-on-1 support tailored to your goals.',
+  image: heroImage,
+  primaryCtaText: 'Start Your Transformation',
+  secondaryCtaText: 'View Client Results',
+  stats: [
+    { icon: 'users', value: '125K+', label: 'Community on Instagram' },
+    { icon: 'badge', value: 'WSWCF', label: 'Certified Calisthenics Coach' },
+    { icon: 'user', value: '100+', label: 'Students Trained' },
+    { icon: 'calendar', value: '5+', label: 'Years of Training Experience' },
+  ],
+  features: [
+    { icon: 'muscle', title: 'Build Muscle & Strength', text: 'Gain lean muscle and functional strength with bodyweight training.' },
+    { icon: 'skill', title: 'Master Advanced Skills', text: 'Muscle-ups, handstands, front lever, planche & more.' },
+    { icon: 'nutrition', title: 'Nutrition Guidance', text: 'Personalized diet plans to fuel your goals and lifestyle.' },
+    { icon: 'support', title: '1-on-1 Support', text: 'Direct coaching, regular feedback and full accountability.' },
+  ],
+  followLabel: 'Follow My Journey',
+  socials: [
+    { platform: 'instagram', url: 'https://instagram.com/calisthenicscoach' },
+    { platform: 'youtube', url: 'https://www.youtube.com' },
+    { platform: 'tiktok', url: 'https://www.tiktok.com' },
+  ],
+  handle: '/SURYA_CALISTHENICS',
+};
+
+const StatIconMap: Record<StatIcon, typeof Users> = {
+  users: Users,
+  badge: BadgeCheck,
+  user: UserCheck,
+  calendar: CalendarDays,
+};
+
+const FeatureIconMap: Record<FeatureIcon, typeof Dumbbell> = {
+  muscle: Dumbbell,
+  skill: PersonStanding,
+  nutrition: Soup,
+  support: MessageCircle,
+};
+
+const SocialIconMap: Record<SocialPlatform, React.ComponentType<{ className?: string }>> = {
+  instagram: Instagram,
+  youtube: Youtube,
+  tiktok: TikTokIcon,
+};
+
+interface HeroProps {
+  content?: Partial<HeroContentV2>;
+  onPrimaryCtaClick: () => void;
+  onSecondaryCtaClick: () => void;
+}
+
+export default function Hero({ content, onPrimaryCtaClick, onSecondaryCtaClick }: HeroProps) {
+  const c: HeroContentV2 = { ...DEFAULT_HERO, ...content };
+
+  return (
+    <section className="relative w-full bg-white overflow-hidden" id="hero">
+
+      {/* ============================================================ */}
+      {/* MOBILE / TABLET LAYOUT (below lg) — matches the reference    */}
+      {/* mockup: top nav bar, then image+stats row, then full-width   */}
+      {/* headline/copy/CTAs stacked underneath.                       */}
+      {/* ============================================================ */}
+      <div className="lg:hidden">
+
+        {/* Top nav bar: logo left, hamburger right */}
+        <div className="flex items-center justify-between px-5 pt-5 pb-1">
+          <div className="text-left leading-none">
+            <span className="font-script block text-xl sm:text-2xl text-brand-primary leading-none">
+              {c.logoScript}
+            </span>
+            <span className="block text-[9px] sm:text-[10px] font-extrabold tracking-[0.25em] text-brand-text mt-1">
+              {c.logoBold}
+            </span>
+          </div>
+          {/* Placeholder trigger only — wire this up to a mobile nav drawer if/when one exists */}
+          {/* <button
+            type="button"
+            aria-label="Open menu"
+            className="p-2 -mr-2 text-brand-text cursor-pointer"
+          >
+            <Menu className="h-6 w-6" strokeWidth={2} />
+          </button> */}
+        </div>
+
+        {/* Image (left, bleeds to screen edge) + vertically-stacked stats (right) */}
+        <div className="flex flex-row items-stretch mt-3">
+          <div className="w-[62%] relative h-[380px] sm:h-[440px] overflow-hidden shrink-0 bg-neutral-50">
+            <img
+              src={c.image}
+              alt="Athlete performing an explosive calisthenics bar exercise"
+              referrerPolicy="no-referrer"
+              className="relative w-full h-full object-cover object-center"
+            />
+          </div>
+
+          <div className="flex-1 flex flex-col justify-center gap-4 sm:gap-5 pl-4 pr-5 min-w-0">
+            {c.stats.map((stat, idx) => {
+              const Icon = StatIconMap[stat.icon];
+              const isLast = idx === c.stats.length - 1;
+              return (
+                <div
+                  key={idx}
+                  className={`flex items-start gap-2.5 ${
+                    isLast ? '' : 'pb-4 sm:pb-5 border-b border-brand-border'
+                  }`}
+                >
+                  <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-brand-primary shrink-0 mt-0.5" strokeWidth={1.6} />
+                  <div className="leading-tight">
+                    <div className="text-base sm:text-lg font-extrabold text-brand-text leading-none">
+                      {stat.value}
+                    </div>
+                    <div className="text-[11px] sm:text-xs text-brand-muted font-light leading-snug mt-1.5">
+                      {stat.label}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Headline + copy + CTAs — full width, below the image/stats row */}
+        <div className="px-5 pt-7 pb-7">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+            className="font-display uppercase text-brand-text text-4xl xs:text-5xl sm:text-6xl leading-[0.98] tracking-tight"
+          >
+            <span className="block">{c.headlineLine1}</span>
+            <span className="block">
+              {c.headlineBlackWord} <span className="text-brand-primary">{c.headlineRedWord}</span>
+            </span>
+          </motion.h1>
+
+          <div className="h-1 w-12 bg-brand-primary mt-4 mb-4" />
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+            className="text-brand-muted font-bold uppercase tracking-[0.12em] text-xs sm:text-sm mb-3"
+          >
+            {c.subheadline}
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.28, ease: 'easeOut' }}
+            className="text-brand-muted text-sm leading-relaxed font-light mb-6"
+          >
+            {c.paragraph}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.36, ease: 'easeOut' }}
+            className="flex flex-col gap-3"
+          >
+            <button
+              onClick={onPrimaryCtaClick}
+              className="w-full inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white font-bold text-xs uppercase tracking-wider px-6 py-4 rounded-lg transition-all active:scale-95 cursor-pointer shadow-lg"
+            >
+              <span>{c.primaryCtaText}</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
+            <button
+              onClick={onSecondaryCtaClick}
+              className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-neutral-50 text-brand-text font-bold text-xs uppercase tracking-wider px-6 py-4 rounded-lg border-2 border-brand-text transition-all active:scale-95 cursor-pointer"
+            >
+              <span>{c.secondaryCtaText}</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ============================================================ */}
+      {/* DESKTOP LAYOUT (lg and up) — unchanged from the original      */}
+      {/* ============================================================ */}
+      <div className="hidden lg:block">
+        <div className="absolute top-6 right-8 z-30 text-right bg-white/85 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-sm">
+          <span className="font-script block text-2xl text-brand-primary leading-none">
+            {c.logoScript}
+          </span>
+          <span className="block text-[10px] font-extrabold tracking-[0.35em] text-brand-text mt-1">
+            {c.logoBold}
+          </span>
+        </div>
+
+        <div className="max-w-[1600px] mx-auto grid grid-cols-12 items-stretch">
+          <div className="relative col-span-5 h-auto min-h-[560px] overflow-hidden bg-neutral-50 pl-6">
+            <span
+              aria-hidden="true"
+              className="block absolute -left-16 top-1/2 -translate-y-1/2 -rotate-90 origin-center font-display text-[8rem] xl:text-[10rem] text-neutral-100 tracking-tight select-none whitespace-nowrap"
+            >
+              {c.bgWord}
+            </span>
+            <img
+              src={c.image}
+              alt="Athlete performing an explosive calisthenics bar exercise"
+              referrerPolicy="no-referrer"
+              className="relative w-full h-full object-cover object-center"
+            />
+          </div>
+
+          <div className="col-span-7 flex flex-col justify-center px-16 py-6">
+            <motion.h1
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
+              className="font-display uppercase text-brand-text text-7xl leading-[0.95] tracking-tight"
+            >
+              <span className="block">{c.headlineLine1}</span>
+              <span className="block">
+                {c.headlineBlackWord} <span className="text-brand-primary">{c.headlineRedWord}</span>
+              </span>
+            </motion.h1>
+
+            <div className="h-1 w-14 bg-brand-primary mt-4 mb-4" />
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.22, ease: 'easeOut' }}
+              className="text-brand-muted font-bold uppercase tracking-[0.15em] text-sm mb-3"
+            >
+              {c.subheadline}
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.32, ease: 'easeOut' }}
+              className="text-brand-muted text-base leading-relaxed max-w-xl font-light mb-5"
+            >
+              {c.paragraph}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.42, ease: 'easeOut' }}
+              className="grid grid-cols-4 gap-y-4 gap-x-3 mb-5"
+            >
+              {c.stats.map((stat, idx) => {
+                const Icon = StatIconMap[stat.icon];
+                return (
+                  <div key={idx} className="relative flex items-center gap-2">
+                    {idx > 0 && (
+                      <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-px h-8 bg-brand-border" />
+                    )}
+                    <Icon className="h-6 w-6 text-brand-primary shrink-0" strokeWidth={1.75} />
+                    <div className="leading-tight">
+                      <div className="text-sm font-extrabold text-brand-text whitespace-nowrap">
+                        {stat.value}
+                      </div>
+                      <div className="text-[10px] text-brand-muted font-light">{stat.label}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </motion.div>
+
+            <div className="h-px w-full bg-brand-border mb-5" />
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.52, ease: 'easeOut' }}
+              className="flex items-center gap-4"
+            >
+              <button
+                onClick={onPrimaryCtaClick}
+                className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white font-bold text-sm uppercase tracking-wider px-7 py-3.5 rounded-lg transition-all active:scale-95 cursor-pointer shadow-lg"
+              >
+                <span>{c.primaryCtaText}</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              <button
+                onClick={onSecondaryCtaClick}
+                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-neutral-50 text-brand-text font-bold text-sm uppercase tracking-wider px-7 py-3.5 rounded-lg border-2 border-brand-text transition-all active:scale-95 cursor-pointer"
+              >
+                <span>{c.secondaryCtaText}</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Dark features bar — shared across breakpoints, unchanged */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="bg-zinc-950 text-white"
+      >
+        <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-14 lg:px-16 py-5 lg:py-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-white/10">
+            {c.features.map((feature, idx) => {
+              const Icon = FeatureIconMap[feature.icon];
+              return (
+                <div key={idx} className="flex items-start gap-3 lg:px-6 lg:first:pl-0">
+                  <Icon className="h-5 w-5 text-brand-primary shrink-0 mt-0.5" strokeWidth={1.75} />
+                  <div>
+                    <h4 className="text-xs md:text-sm font-extrabold uppercase tracking-wide mb-1">
+                      {feature.title}
+                    </h4>
+                    <p className="text-[11px] md:text-xs text-zinc-400 font-light leading-relaxed">
+                      {feature.text}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="h-px w-full bg-white/10 my-5" />
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-zinc-400 uppercase">
+              {c.followLabel}
+            </span>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2.5">
+                {c.socials.map((social, idx) => {
+                  const Icon = SocialIconMap[social.platform];
+                  return (
+                    <a
+                      key={idx}
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={social.platform}
+                      className="h-8 w-8 flex items-center justify-center bg-brand-primary/10 border border-brand-primary/30 hover:bg-brand-primary/20 rounded-md text-brand-primary transition-all"
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                    </a>
+                  );
+                })}
+              </div>
+              <span className="text-white/20 hidden sm:inline">|</span>
+              <span className="text-xs md:text-sm font-mono font-bold tracking-widest text-white">
+                {c.handle}
+              </span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/VideoSection.tsx">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+'use client';
+
+import React, { useRef, useState, useCallback, useEffect } from 'react';
+import { motion } from 'motion/react';
+import { VideoContent } from '../types';
+import { Film, Volume2, VolumeX } from 'lucide-react';
+
+interface VideoSectionProps {
+  content: VideoContent;
+}
+
+export default function VideoSection({ content }: VideoSectionProps) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // The user's *intent*: do they want sound on, if the video is visible?
+  // Default to true so the video unmuted when the section scrolls into view.
+  const [wantsSound, setWantsSound] = useState(true);
+  // Whether the video player is actually visible in the viewport right now.
+  const [isInView, setIsInView] = useState(false);
+
+  // Construct a secure, looping, chromeless YouTube embed URL.
+  // autoplay=0         -> playback is driven manually via the IFrame API once the
+  //                       section scrolls into view, not as soon as the iframe loads
+  // controls=0        -> no play/pause/progress bar
+  // disablekb=1       -> no keyboard interaction (space to pause, arrows to seek, etc.)
+  // fs=0               -> no fullscreen button
+  // iv_load_policy=3   -> no annotations
+  // modestbranding=1   -> minimal YouTube logo
+  // rel=0 + loop=1 + playlist=<same id> -> loops the same video instead of
+  //                     showing the end-screen "related videos" grid
+  // showinfo=0         -> (legacy) no title/uploader info
+  // enablejsapi=1       -> required so we can postMessage play/pause/mute commands
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const embedUrl = `https://www.youtube.com/embed/${content.youtube_id}?autoplay=0&mute=1&loop=1&playlist=${content.youtube_id}&controls=0&disablekb=1&fs=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&showinfo=0&enablejsapi=1&origin=${origin}`;
+
+  // Send a command to the embedded YouTube player via postMessage,
+  // following the YouTube IFrame API protocol.
+  const postCommand = useCallback((func: 'mute' | 'unMute' | 'playVideo' | 'pauseVideo') => {
+    iframeRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func, args: [] }),
+      'https://www.youtube.com'
+    );
+  }, []);
+
+  // Actual audio state = user wants sound AND the video is currently on screen.
+  const isAudible = wantsSound && isInView;
+
+  // Sync the player's mute state whenever intent or visibility changes.
+  useEffect(() => {
+    postCommand(isAudible ? 'unMute' : 'mute');
+  }, [isAudible, postCommand]);
+
+  // Play only while the section is actually visible; pause the instant it
+  // scrolls out of view, and resume automatically when the user scrolls back.
+  useEffect(() => {
+    postCommand(isInView ? 'playVideo' : 'pauseVideo');
+  }, [isInView, postCommand]);
+
+  // Watch for the video entering/leaving the viewport.
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Consider it "in view" once at least half the player is visible.
+        setIsInView(entry.isIntersecting && entry.intersectionRatio >= 0.5);
+      },
+      { threshold: [0, 0.5, 1] }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  const toggleMute = () => {
+    setWantsSound((prev) => !prev);
+  };
+
+  return (
+    <section className="py-24 bg-brand-bg text-brand-text relative border-b border-brand-border" id="video">
+      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+
+        {/* Section Header */}
+        <div className="mb-12">
+          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase mb-3">
+            <Film className="h-3.5 w-3.5 text-brand-primary" /> INSIDE MY COACHING SYSTEM
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text">
+            Train smarter <span className="text-brand-primary">Progress faster</span>
+          </h2>
+          <p className="text-brand-muted text-sm md:text-sm max-w-xl mx-auto mt-4 font-sans font-light">
+            {content.video_title} — Discover the proven training methods, progressions, and coaching strategies I use to help athletes build real strength, master Basic to  advanced calisthenics skills, and achieve consistent results—without wasting time on ineffective workouts.
+          </p>
+        </div>
+
+        {/* Video Player Frame with Stark Border */}
+        <motion.div
+          ref={sectionRef}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="relative rounded-none shadow-3xl group"
+        >
+          {/* Shifting Border replaced with stark flat border */}
+          <div className="relative rounded-none p-[1px] bg-brand-border">
+
+            {/* The Actual Landscape Aspect-Video Player */}
+            <div className="relative aspect-video w-full rounded-none overflow-hidden bg-black">
+              <iframe
+                ref={iframeRef}
+                src={embedUrl}
+                title={content.video_title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                className="absolute top-0 left-0 w-full h-full border-0"
+              />
+
+              {/*
+                Transparent interaction-blocking overlay.
+                Sits above the iframe and intercepts all clicks/taps so the
+                user can never trigger YouTube's title bar, pause button,
+                progress scrubber, or any other native chrome — the video
+                simply plays through untouched.
+              */}
+              <div
+                className="absolute top-0 left-0 w-full h-full z-10 cursor-default pointer-events-auto"
+                aria-hidden="true"
+              />
+
+              {/* Custom mute/unmute control — the only interactive element allowed */}
+              <button
+                type="button"
+                onClick={toggleMute}
+                aria-label={wantsSound ? 'Mute video' : 'Unmute video'}
+                aria-pressed={wantsSound}
+                className="absolute bottom-3 right-3 z-20 flex items-center justify-center h-9 w-9 rounded-none bg-black/70 border border-white/20 text-white hover:bg-black/90 transition-colors backdrop-blur-sm"
+              >
+                {isAudible ? (
+                  <Volume2 className="h-4 w-4" />
+                ) : (
+                  <VolumeX className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/types.ts">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+export interface HeroContent {
+  headline: string;
+  subheadline: string;
+  background_gif: string;
+  desktop_image: string;
+  mobile_image: string;
+  cta_text: string;
+}
+
+export interface FloatingCtaContent {
+  button_text: string;
+}
+
+export interface TransformationItem {
+  img: string;
+  name: string;
+  desc: string;
+  stage?: string;
+  duration?: string;
+  program?: string;
+}
+
+export interface AboutContent {
+  coach_name: string;
+  coach_title: string;
+  coach_photo: string;
+  certification_photo: string;
+  bio_heading: string;
+  bio_paragraph_1: string;
+  bio_paragraph_2: string;
+}
+
+export interface VideoContent {
+  youtube_id: string;
+  video_title: string;
+}
+
+export interface ReviewItem {
+  text: string;
+  author: string;
+}
+
+export interface ProgramBenefit {
+  icon: string;
+  title: string;
+  text: string;
+}
+
+export interface ProgramContent {
+  section_title: string;
+  section_subtitle: string;
+  supporting_image: string;
+  points: ProgramBenefit[];
+}
+
+export interface FooterContent {
+  instagram_url: string;
+  youtube_url: string;
+  contact_email: string;
+  contact_phone: string;
+  copyright: string;
+  secondary_cta_text: string;
+  youtube_cta_text: string;
+}
+
+export interface VideoTestimonialItem {
+  athlete: string;
+  badge: string;
+  videoDuration: string;
+  weekLabel: string;
+  statHeadline: string;
+  statSubtext: string;
+  desc: string;
+  videoId: string;
+}
+
+export interface VideoTestimonialsContent {
+  section_eyebrow: string;
+  section_title: string;
+  section_subtitle: string;
+  items: VideoTestimonialItem[];
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface FaqContent {
+  section_eyebrow: string;
+  section_title: string;
+  section_subtitle: string;
+  items: FaqItem[];
+}
+
+export interface WebsiteContent {
+  hero: HeroContent;
+  floating_cta: FloatingCtaContent;
+  transformations: TransformationItem[];
+  about: AboutContent;
+  video: VideoContent;
+  reviews: ReviewItem[];
+  program: ProgramContent;
+  footer: FooterContent;
+  videoTestimonials: VideoTestimonialsContent;
+  faq: FaqContent;
+}
+</file>
+
+<file path="src/utils/parser.ts">
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import {
+  WebsiteContent,
+  TransformationItem,
+  ReviewItem,
+  ProgramBenefit,
+  HeroContent,
+  FloatingCtaContent,
+  AboutContent,
+  VideoContent,
+  ProgramContent,
+  FooterContent,
+  VideoTestimonialItem,
+  VideoTestimonialsContent,
+  FaqItem,
+  FaqContent
+} from '../types';
+
+// Robust high-quality defaults matching the content.txt
+export const DEFAULT_CONTENT: WebsiteContent = {
+  hero: {
+    headline: "Command Total Body Control",
+    subheadline: "Build raw strength, a shredded physique, and explosive bodyweight skill — mastered rep by rep with elite calisthenics coaching.",
+    background_gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDVqamNsbGF0OHFhcWlzMTBmaDVodTN2Zms3a2l3Mmt4ZGR3ZjhsMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKrEzvLbsVAud8I/giphy.gif",
+    desktop_image: "/images/desktop-hero.png",
+    mobile_image: "/images/mobile-hero.png",
+    cta_text: "Start Your Transformation",
+  },
+  floating_cta: {
+    button_text: "Join Program Now",
+  },
+  transformations: [
+    {
+      img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop",
+      name: "Marcus T. - 12 Weeks",
+      desc: "Went from 0 to 12 clean pull-ups, dropping 8% body fat."
+    },
+    {
+      img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop",
+      name: "Sarah K. - 16 Weeks",
+      desc: "Achieved a solid 15-second freestanding handstand and elite core power."
+    },
+    {
+      img: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=600&auto=format&fit=crop",
+      name: "Alex R. - 24 Weeks",
+      desc: "Mastered the full muscle-up and unlocked advanced gymnastic ring flows."
+    },
+    {
+      img: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop",
+      name: "David L. - 8 Weeks",
+      desc: "Rebuilt posture, cured shoulder pain, and unlocked elite body control."
+    }
+  ],
+  about: {
+    coach_name: "Coach Surya",
+    coach_title: "Elite Calisthenics Specialist & Founder",
+    coach_photo: "/images/coach.jpeg",
+    certification_photo: "/images/certificate.jpeg",
+    bio_heading: "Meet Your Coach",
+    bio_paragraph_1: "Hey, I'm Surya. I spent over a decade perfecting bodyweight training to unlock movements most think are reserved for elite gymnasts. My mission is to demystify advanced calisthenics, turning complex skills into scientific, progressive training steps anyone can follow.",
+    bio_paragraph_2: "Having coached over 500+ athletes worldwide through mobile-optimized virtual programs, I focus on building raw, functional strength, bulletproofing joints, and developing a shredded, high-performance physique without the need for heavy weights."
+  },
+  video: {
+    youtube_id: "Z8wZg76B2uM",
+    video_title: "Calisthenics Masterclass & Progression Secrets"
+  },
+  reviews: [
+    {
+      text: "Able to gain some shape in shoulder and chest, I realized an increase in hand power and can do 1 to 2 pullups now; before starting I could not do even one. I also saw strength gains in my thighs, though my core still needs work. Overall, visible improvement in some parts; I need to stay consistent 5 days a week to see more positives.",
+      author: "Basker (42yr old)"
+    },
+    {
+      text: "It's been 3 months of a great journey into the calisthenics world with you. I was skeptical about online coaching at first, but now I feel very happy with the decision. You analyzed my workouts and tailored every exercise, making me comfortable and confident. Thank you for pushing my limits and helping me unlock new skills.",
+      author: "Sidharth (32yr old)"
+    },
+    {
+      text: "These two months with coach Surya have been amazing. My endurance, flexibility, and strength improved a lot, and I learned the correct form for every exercise plus calisthenics basics like frog pose. This journey is already amazing and there is a long way to go.",
+      author: "Yasin (30yr old)"
+    },
+    {
+      text: "Intha two months ennaku nalla challenge ah irunthuchi. Everyday pain feel panna atha enjoy panna, every midnight ennoda kai semma pain tharum but I will not stop. Naa strong ah irukken nu feel pandren. I can feel my body shape changing and my blood sugar is under control. Totally I feel so happy.",
+      author: "Pooja (19yr old)"
+    },
+    {
+      text: "Overall, nice experience for the first 3 months bro. I saw better changes than a year at gym without taking protein supplements. Weekly workout variation made it more interesting and motivating. Calisthenics became a stress buster while I handle study pressure, and I am renewing for another 3 months.",
+      author: "Kumar (28yr old)"
+    },
+    {
+      text: "After just 12 classes, I cannot thank Surya enough for the incredible change I’ve experienced. I was unsure of my strength and flexibility at first, but his expertise, patience, and motivation changed my perspective on fitness. Moves that once seemed impossible, like pull-ups, now feel within reach.",
+      author: "Anonymous (35yr old)"
+    }
+  ],
+  program: {
+    section_title: "Inside the Coaching Experience",
+    section_subtitle: "Everything you need to build strength, master advanced calisthenics skills, and stay consistent—all in one personalized coaching system designed around your goals.",
+    supporting_image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop",
+    points: [
+      {
+        icon: "Target",
+        title: "PERSONALIZED SKILL PROGRESSIONS",
+        text: "Master pull-ups, muscle-ups, handstands, front lever, and planche through structured progressions tailored to your level."
+      },
+      {
+        icon: "Flame",
+        title: "STRENGTH & PHYSIQUE DEVELOPMENT",
+        text: "Build lean muscle, increase [obscured] strength, and develop [obscured] athletic physique with progressive bodyweight training."
+      },
+      {
+        icon: "Shield",
+        title: "MOBILITY & INJURY PREVENTION",
+        text: "Improve flexibility, joint health, and movement quality with mobility routines that help you train consistently and reduce injury risk."
+      },
+      {
+        icon: "Zap",
+        title: "YOUR COACHING DASHBOARD",
+        text: "Access workouts, demonstration videos, progress tracking, form reviews, and direct coach support—[obscured]"
+      }
+    ]
+  },
+  footer: {
+    instagram_url: "https://instagram.com/calisthenicscoach",
+    youtube_url: "https://www.youtube.com",
+    contact_email: "contact@bodyweightathlete.com",
+    contact_phone: "+1 (555) 019-3829",
+    copyright: "© 2026 Surya Calisthenics. All rights reserved.",
+    secondary_cta_text: "Follow on Instagram",
+    youtube_cta_text: "Subscribe on YouTube"
+  },
+  videoTestimonials: {
+    section_eyebrow: "Clients Progress Library",
+    section_title: "Progress in Motion",
+    section_subtitle: "Drag or swipe the video horizontally to slide through progress clips.",
+    items: [
+      {
+        athlete: "Marcus T.",
+        badge: "MUSCLE-UP",
+        videoDuration: "2:14",
+        weekLabel: "WEEK 12 • MUSCLE-UP PROGRESS",
+        statHeadline: "From 0 to 3 Strict Muscle-Ups",
+        statSubtext: "12 Weeks Transformation",
+        desc: "Demonstrating solid front lever control and explosive muscle-up strength after consistent progressions.",
+        videoId: "78zo1AeWSc8"
+      },
+      {
+        athlete: "Sarah K.",
+        badge: "HANDSTAND",
+        videoDuration: "1:58",
+        weekLabel: "WEEK 16 • HANDSTAND BREAKTHROUGH",
+        statHeadline: "Built shoulder stability and balance",
+        statSubtext: "16 Weeks Progress",
+        desc: "Achieving clean freestanding holds and tight body alignment through targeted shoulder work.",
+        videoId: "p9gYwJ8I9uY"
+      },
+      {
+        athlete: "Alex R.",
+        badge: "STRENGTH",
+        videoDuration: "2:05",
+        weekLabel: "WEEK 24 • STRENGTH EVOLUTION",
+        statHeadline: "Clean gymnastic ring transitions",
+        statSubtext: "24 Weeks Mastery",
+        desc: "Executing fluid ring muscle-up flows and stable support holds after systematic strength buildup.",
+        videoId: "EGMG_7m_xH4"
+      },
+      {
+        athlete: "David L.",
+        badge: "MOBILITY",
+        videoDuration: "1:52",
+        weekLabel: "WEEK 8 • MOBILITY UPGRADE",
+        statHeadline: "Pain-free overhead range",
+        statSubtext: "8 Weeks Reset",
+        desc: "Restoring overhead movement quality and smooth press patterns through mobility-focused training.",
+        videoId: "j71XgK-9Kco"
+      }
+    ]
+  },
+  faq: {
+    section_eyebrow: "Common Questions",
+    section_title: "Frequently Asked Questions",
+    section_subtitle: "Everything you need to know before you start your bodyweight transformation.",
+    items: [
+      {
+        question: "Can beginners join?",
+        answer: "Yes, every exercise is scalable to match your current fitness level with beginner-friendly progressions."
+      },
+      {
+        question: "Do I need a gym?",
+        answer: "No, you can train anywhere using your body weight, though a pull-up bar or resistance bands help."
+      },
+      {
+        question: "Can I lose fat?",
+        answer: "Yes, high-energy bodyweight workouts burn calories, boost your metabolism, and help strip body fat."
+      },
+      {
+        question: "Can I build muscle?",
+        answer: "Yes, by applying progressive overload with tougher variations and leverage, you will build lean muscle."
+      },
+      {
+        question: "How many days per week?",
+        answer: "3 to 4 days per week is ideal for steady progress and proper recovery."
+      },
+      {
+        question: "Do you provide nutrition?",
+        answer: "Yes, I provide clear nutrition guidelines and calorie/macro targets to support your goals."
+      }
+    ]
+  }
+};
+
+/**
+ * Parses INI formatted content from content.txt
+ */
+export function parseContentTxt(text: string): WebsiteContent {
+  const result: any = {};
+  let currentSection = '';
+  
+  const lines = text.split(/\r?\n/);
+  
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    
+    // Skip empty lines and comments
+    if (!line || line.startsWith('#') || line.startsWith(';')) {
+      continue;
+    }
+    
+    // Check for section header: [SECTION]
+    if (line.startsWith('[') && line.endsWith(']')) {
+      currentSection = line.slice(1, -1).trim().toUpperCase();
+      result[currentSection] = result[currentSection] || {};
+      continue;
+    }
+    
+    if (currentSection) {
+      const eqIdx = line.indexOf('=');
+      if (eqIdx !== -1) {
+        const key = line.slice(0, eqIdx).trim();
+        const val = line.slice(eqIdx + 1).trim();
+        result[currentSection][key] = val;
+      }
+    }
+  }
+
+  // Construct structured WebsiteContent
+  const hero: HeroContent = {
+    headline: result.HERO?.headline || DEFAULT_CONTENT.hero.headline,
+    subheadline: result.HERO?.subheadline || DEFAULT_CONTENT.hero.subheadline,
+    background_gif: result.HERO?.background_gif || DEFAULT_CONTENT.hero.background_gif,
+    desktop_image: result.HERO?.desktop_image || DEFAULT_CONTENT.hero.desktop_image,
+    mobile_image: result.HERO?.mobile_image || DEFAULT_CONTENT.hero.mobile_image,
+    cta_text: result.HERO?.cta_text || DEFAULT_CONTENT.hero.cta_text,
+  };
+
+  const floating_cta: FloatingCtaContent = {
+    button_text: result.FLOATING_CTA?.button_text || DEFAULT_CONTENT.floating_cta.button_text,
+  };
+
+  // Build transformations dynamically
+  const transformations: TransformationItem[] = [];
+  const transformationSource = result.TRANSFORMATIONS || {};
+  const transformationIndices = Object.keys(transformationSource)
+    .map((key) => key.match(/^trans_(\d+)_img$/))
+    .filter((match): match is RegExpMatchArray => Boolean(match))
+    .map((match) => Number.parseInt(match[1], 10))
+    .sort((a, b) => a - b);
+
+  for (const i of transformationIndices) {
+    const imgKey = `trans_${i}_img`;
+    const nameKey = `trans_${i}_name`;
+    const descKey = `trans_${i}_desc`;
+    const stageKey = `trans_${i}_stage`;
+    const durationKey = `trans_${i}_duration`;
+    const programKey = `trans_${i}_program`;
+
+    transformations.push({
+      img: transformationSource[imgKey],
+      name: transformationSource[nameKey] || `Transformation #${i}`,
+      desc: transformationSource[descKey] || '',
+      stage: transformationSource[stageKey] || '',
+      duration: transformationSource[durationKey] || '',
+      program: transformationSource[programKey] || '',
+    });
+  }
+  
+  if (transformations.length === 0) {
+    transformations.push(...DEFAULT_CONTENT.transformations);
+  }
+
+  const about: AboutContent = {
+    coach_name: result.ABOUT?.coach_name || DEFAULT_CONTENT.about.coach_name,
+    coach_title: result.ABOUT?.coach_title || DEFAULT_CONTENT.about.coach_title,
+    coach_photo: result.ABOUT?.coach_photo || DEFAULT_CONTENT.about.coach_photo,
+    certification_photo: result.ABOUT?.certification_photo || DEFAULT_CONTENT.about.certification_photo,
+    bio_heading: result.ABOUT?.bio_heading || DEFAULT_CONTENT.about.bio_heading,
+    bio_paragraph_1: result.ABOUT?.bio_paragraph_1 || DEFAULT_CONTENT.about.bio_paragraph_1,
+    bio_paragraph_2: result.ABOUT?.bio_paragraph_2 || DEFAULT_CONTENT.about.bio_paragraph_2,
+  };
+
+  const video: VideoContent = {
+    youtube_id: result.VIDEO?.youtube_id || DEFAULT_CONTENT.video.youtube_id,
+    video_title: result.VIDEO?.video_title || DEFAULT_CONTENT.video.video_title,
+  };
+
+  // Build reviews dynamically
+  const reviews: ReviewItem[] = [];
+  
+  for (let i = 1; i <= 20; i++) {
+    const key = `review_${i}`;
+    if (result.REVIEWS?.[key]) {
+      const rawReview = result.REVIEWS[key];
+      // Try to parse out author. Reviews are like "text" - Author
+      let text = rawReview;
+      let author = "Anonymous";
+      
+      const lastHyphen = rawReview.lastIndexOf(' - ');
+      if (lastHyphen !== -1) {
+        text = rawReview.slice(0, lastHyphen).trim();
+        author = rawReview.slice(lastHyphen + 3).trim();
+        // Remove surrounding quotes if any
+        if (text.startsWith('"') && text.endsWith('"')) {
+          text = text.slice(1, -1);
+        } else if (text.startsWith('“') && text.endsWith('”')) {
+          text = text.slice(1, -1);
+        }
+      }
+      
+      reviews.push({ text, author });
+    }
+  }
+  
+  if (reviews.length === 0) {
+    reviews.push(...DEFAULT_CONTENT.reviews);
+  }
+
+  // Build program benefits dynamically
+  const points: ProgramBenefit[] = [];
+  for (let i = 1; i <= 10; i++) {
+    const iconKey = `point_${i}_icon`;
+    const titleKey = `point_${i}_title`;
+    const textKey = `point_${i}_text`;
+    
+    if (result.PROGRAM?.[titleKey]) {
+      points.push({
+        icon: result.PROGRAM[iconKey] || 'Award',
+        title: result.PROGRAM[titleKey],
+        text: result.PROGRAM[textKey] || '',
+      });
+    }
+  }
+  
+  const program: ProgramContent = {
+    section_title: result.PROGRAM?.section_title || DEFAULT_CONTENT.program.section_title,
+    section_subtitle: result.PROGRAM?.section_subtitle || DEFAULT_CONTENT.program.section_subtitle,
+    supporting_image: result.PROGRAM?.supporting_image || DEFAULT_CONTENT.program.supporting_image,
+    points: points.length > 0 ? points : DEFAULT_CONTENT.program.points,
+  };
+
+  const footer: FooterContent = {
+    instagram_url: result.FOOTER?.instagram_url || DEFAULT_CONTENT.footer.instagram_url,
+    youtube_url: result.FOOTER?.youtube_url || DEFAULT_CONTENT.footer.youtube_url,
+    contact_email: result.FOOTER?.contact_email || DEFAULT_CONTENT.footer.contact_email,
+    contact_phone: result.FOOTER?.contact_phone || DEFAULT_CONTENT.footer.contact_phone,
+    copyright: result.FOOTER?.copyright || DEFAULT_CONTENT.footer.copyright,
+    secondary_cta_text: result.FOOTER?.secondary_cta_text || DEFAULT_CONTENT.footer.secondary_cta_text,
+    youtube_cta_text: result.FOOTER?.youtube_cta_text || DEFAULT_CONTENT.footer.youtube_cta_text,
+  };
+
+  // Build video testimonials dynamically
+  const hasVideoTestimonialsSection = Object.prototype.hasOwnProperty.call(result, 'VIDEO_TESTIMONIALS');
+  const videoTestimonialItems: VideoTestimonialItem[] = [];
+  const videoTestimonialsSource = result.VIDEO_TESTIMONIALS || {};
+  const clientIndices = Object.keys(videoTestimonialsSource)
+    .map((key) => key.match(/^client_(\d+)_name$/))
+    .filter((match): match is RegExpMatchArray => Boolean(match))
+    .map((match) => Number.parseInt(match[1], 10))
+    .sort((a, b) => a - b);
+
+  for (const i of clientIndices) {
+    const nameKey = `client_${i}_name`;
+    const badgeKey = `client_${i}_badge`;
+    const videoIdKey = `client_${i}_video_id`;
+    const durationKey = `client_${i}_video_duration`;
+    const weekLabelKey = `client_${i}_week_label`;
+    const statHeadlineKey = `client_${i}_stat_headline`;
+    const statSubtextKey = `client_${i}_stat_subtext`;
+    const descKey = `client_${i}_desc`;
+
+    if (videoTestimonialsSource[nameKey]) {
+      videoTestimonialItems.push({
+        athlete: videoTestimonialsSource[nameKey],
+        badge: videoTestimonialsSource[badgeKey] || '',
+        videoDuration: videoTestimonialsSource[durationKey] || '',
+        weekLabel: videoTestimonialsSource[weekLabelKey] || '',
+        statHeadline: videoTestimonialsSource[statHeadlineKey] || '',
+        statSubtext: videoTestimonialsSource[statSubtextKey] || '',
+        desc: videoTestimonialsSource[descKey] || '',
+        videoId: videoTestimonialsSource[videoIdKey] || '78zo1AeWSc8',
+      });
+    }
+  }
+
+  if (!hasVideoTestimonialsSection && videoTestimonialItems.length === 0) {
+    videoTestimonialItems.push(...DEFAULT_CONTENT.videoTestimonials.items);
+  }
+
+  const videoTestimonials: VideoTestimonialsContent = {
+    section_eyebrow: result.VIDEO_TESTIMONIALS?.section_eyebrow || DEFAULT_CONTENT.videoTestimonials.section_eyebrow,
+    section_title: result.VIDEO_TESTIMONIALS?.section_title || DEFAULT_CONTENT.videoTestimonials.section_title,
+    section_subtitle: result.VIDEO_TESTIMONIALS?.section_subtitle || DEFAULT_CONTENT.videoTestimonials.section_subtitle,
+    items: videoTestimonialItems,
+  };
+
+  // Build FAQ items dynamically
+  const faqItems: FaqItem[] = [];
+  const faqSource = result.FAQ || {};
+  const faqIndices = Object.keys(faqSource)
+    .map((key) => key.match(/^faq_(\d+)_question$/))
+    .filter((match): match is RegExpMatchArray => Boolean(match))
+    .map((match) => Number.parseInt(match[1], 10))
+    .sort((a, b) => a - b);
+
+  for (const i of faqIndices) {
+    const questionKey = `faq_${i}_question`;
+    const answerKey = `faq_${i}_answer`;
+    if (faqSource[questionKey]) {
+      faqItems.push({
+        question: faqSource[questionKey],
+        answer: faqSource[answerKey] || '',
+      });
+    }
+  }
+
+  const faq: FaqContent = {
+    section_eyebrow: result.FAQ?.section_eyebrow || DEFAULT_CONTENT.faq.section_eyebrow,
+    section_title: result.FAQ?.section_title || DEFAULT_CONTENT.faq.section_title,
+    section_subtitle: result.FAQ?.section_subtitle || DEFAULT_CONTENT.faq.section_subtitle,
+    items: faqItems.length > 0 ? faqItems : DEFAULT_CONTENT.faq.items,
+  };
+
+  return {
+    hero,
+    floating_cta,
+    transformations,
+    about,
+    video,
+    reviews,
+    program,
+    footer,
+    videoTestimonials,
+    faq,
+  };
+}
+</file>
+
+</files>

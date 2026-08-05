@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Dynamic brand theme colors - Red & White scheme */
+  --brand-primary: #FF0000;      /* Active athletic red (rose-600) */
+  --brand-secondary: #BE123C;    /* Deeper dark red (rose-700) */
+  --brand-bg: #FFFFFF;           /* Pristine main background */
+  --brand-card: #FAFAFA;         /* Premium light card background */
+  --brand-text: #0F172A;         /* Slate-900 heading and body text */
+  --brand-muted: #475569;        /* Slate-600 descriptions and captions */
+  --brand-border: #E2E8F0;       /* Slate-200 clean border divider */
+  --brand-selection-bg: #E11D48;
+  --brand-selection-text: #FFFFFF;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, ui-serif, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Anton", Impact, "Arial Narrow Bold", sans-serif;
+  --font-script: "Dancing Script", cursive;
+  
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-card: var(--brand-card);
+  --color-brand-text: var(--brand-text);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-border: var(--brand-border);
+
+  --animate-marquee: marquee-rtl 45s linear infinite;
+  --animate-marquee-ltr: marquee-ltr 45s linear infinite;
+  --animate-marquee-rtl: marquee-rtl 45s linear infinite;
+
+  @keyframes marquee-ltr {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0%); }
+  }
+  @keyframes marquee-rtl {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+/* Custom scrollbar and premium smooth scrolling style */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--brand-bg);
+  color: var(--brand-text);
+}
+
+@media (min-width: 1490px) {
+  .hero-wide-headline {
+    font-size: 6rem;
+  }
+
+  .hero-wide-copy {
+    font-size: 1.5rem;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--brand-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-border);
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-primary);
+}
