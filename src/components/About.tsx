@@ -37,12 +37,7 @@ export default function About({ onCtaClick }: AboutProps) {
       icon: UserCheck,
       title: 'Certified Bodyweight Specialist',
       desc: 'WSWCF Certified Personal Trainer with expertise in calisthenics & street workout.',
-    },
-    {
-      icon: Link2,
-      title: 'Expert in Gymnastic Rings',
-      desc: 'Specialized in ring training, strength skills, and advanced movement progressions.',
-    },
+    }
   ];
 
   const scrollToTransformations = () => {

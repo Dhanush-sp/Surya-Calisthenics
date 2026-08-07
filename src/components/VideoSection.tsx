@@ -7,8 +7,7 @@
 
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'motion/react';
-// VideoSection content hardcoded
-import { Film, Volume2, VolumeX } from 'lucide-react';
+import { Film, Play, Volume2, VolumeX } from 'lucide-react';
 
 interface VideoSectionProps {}
 
@@ -17,29 +16,15 @@ export default function VideoSection(_: VideoSectionProps) {
   const content = { youtube_id: 'A2Pyek_zsq0', video_title: 'Online Calisthenics Coaching' };
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // The user's *intent*: do they want sound on, if the video is visible?
-  // Default to true so the video unmuted when the section scrolls into view.
+  // Video playback & sound states
+  const [isPlaying, setIsPlaying] = useState(false);
   const [wantsSound, setWantsSound] = useState(true);
-  // Whether the video player is actually visible in the viewport right now.
   const [isInView, setIsInView] = useState(false);
 
-  // Construct a secure, looping, chromeless YouTube embed URL.
-  // autoplay=0         -> playback is driven manually via the IFrame API once the
-  //                       section scrolls into view, not as soon as the iframe loads
-  // controls=0        -> no play/pause/progress bar
-  // disablekb=1       -> no keyboard interaction (space to pause, arrows to seek, etc.)
-  // fs=0               -> no fullscreen button
-  // iv_load_policy=3   -> no annotations
-  // modestbranding=1   -> minimal YouTube logo
-  // rel=0 + loop=1 + playlist=<same id> -> loops the same video instead of
-  //                     showing the end-screen "related videos" grid
-  // showinfo=0         -> (legacy) no title/uploader info
-  // enablejsapi=1       -> required so we can postMessage play/pause/mute commands
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const embedUrl = `https://www.youtube.com/embed/${content.youtube_id}?autoplay=0&mute=1&loop=1&playlist=${content.youtube_id}&controls=0&disablekb=1&fs=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&cc_load_policy=0&showinfo=0&enablejsapi=1&origin=${origin}`;
 
-  // Send commands to the embedded YouTube player via postMessage,
-  // following the YouTube IFrame API protocol.
+  // Helper to post messages to YouTube iframe
   const postCommand = useCallback((func: string, args: unknown[] = []) => {
     iframeRef.current?.contentWindow?.postMessage(
       JSON.stringify({ event: 'command', func, args }),
@@ -47,8 +32,6 @@ export default function VideoSection(_: VideoSectionProps) {
     );
   }, []);
 
-  // Force captions/subtitles off even if the viewer's YouTube account
-  // has captions enabled by default.
   const disableCaptions = useCallback(() => {
     postCommand('setOption', ['captions', 'track', {}]);
     postCommand('unloadModule', ['captions']);
@@ -60,45 +43,54 @@ export default function VideoSection(_: VideoSectionProps) {
     window.setTimeout(disableCaptions, 900);
   }, [disableCaptions]);
 
-  // Actual audio state = user wants sound AND the video is currently on screen.
-  const isAudible = wantsSound && isInView;
+  // Handle Play button click: Start playing AND unmute audio
+  const handleStartPlay = () => {
+    setIsPlaying(true);
+    setWantsSound(true);
+    postCommand('unMute');
+    postCommand('playVideo');
+    disableCaptionsWithRetry();
+  };
 
-  // Sync the player's mute state whenever intent or visibility changes.
+  // Toggle Mute / Unmute
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setWantsSound((prev) => !prev);
+  };
+
+  // Sync mute/unmute state when toggled
   useEffect(() => {
-    postCommand(isAudible ? 'unMute' : 'mute');
-  }, [isAudible, postCommand]);
+    if (isPlaying) {
+      postCommand(wantsSound ? 'unMute' : 'mute');
+    }
+  }, [wantsSound, isPlaying, postCommand]);
 
-  // Play only while the section is actually visible; pause the instant it
-  // scrolls out of view, and resume automatically when the user scrolls back.
+  // Pause video if scrolled out of view; resume if playing was previously triggered
   useEffect(() => {
-    postCommand(isInView ? 'playVideo' : 'pauseVideo');
-  }, [isInView, postCommand]);
+    if (!isPlaying) return;
 
-  // Re-apply caption-off commands when visible to guard against player resets.
-  useEffect(() => {
-    if (isInView) disableCaptionsWithRetry();
-  }, [isInView, disableCaptionsWithRetry]);
+    if (isInView) {
+      postCommand('playVideo');
+    } else {
+      postCommand('pauseVideo');
+    }
+  }, [isInView, isPlaying, postCommand]);
 
-  // Watch for the video entering/leaving the viewport.
+  // Intersection Observer for viewport tracking
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Consider it "in view" once at least half the player is visible.
-        setIsInView(entry.isIntersecting && entry.intersectionRatio >= 0.5);
+        setIsInView(entry.isIntersecting && entry.intersectionRatio >= 0.3);
       },
-      { threshold: [0, 0.5, 1] }
+      { threshold: [0, 0.3, 0.5, 1] }
     );
 
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
-
-  const toggleMute = () => {
-    setWantsSound((prev) => !prev);
-  };
 
   return (
     <section className="py-24 bg-brand-bg text-brand-text relative border-b border-brand-border" id="video">
@@ -113,11 +105,11 @@ export default function VideoSection(_: VideoSectionProps) {
             Train smarter <span className="text-brand-primary">Progress faster</span>
           </h2>
           <p className="text-brand-muted text-sm md:text-sm max-w-xl mx-auto mt-4 font-sans font-light">
-            {content.video_title} — Discover the proven training methods, progressions, and coaching strategies I use to help athletes build real strength, master Basic to  advanced calisthenics skills, and achieve consistent results—without wasting time on ineffective workouts.
+            {content.video_title} — Discover the proven training methods, progressions, and coaching strategies I use to help athletes build real strength, master Basic to advanced calisthenics skills, and achieve consistent results—without wasting time on ineffective workouts.
           </p>
         </div>
 
-        {/* Video Player Frame with Stark Border */}
+        {/* Video Player Frame */}
         <motion.div
           ref={sectionRef}
           initial={{ opacity: 0, y: 30 }}
@@ -126,48 +118,69 @@ export default function VideoSection(_: VideoSectionProps) {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="relative rounded-none shadow-3xl group"
         >
-          {/* Shifting Border replaced with stark flat border */}
           <div className="relative rounded-none p-[1px] bg-brand-border">
-
-            {/* The Actual Landscape Aspect-Video Player */}
             <div className="relative aspect-video w-full rounded-none overflow-hidden bg-black">
+              
+              {/* YouTube Iframe */}
               <iframe
                 ref={iframeRef}
                 src={embedUrl}
                 title={content.video_title}
-                onLoad={disableCaptionsWithRetry}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 className="absolute top-0 left-0 w-full h-full border-0"
               />
 
-              {/*
-                Transparent interaction-blocking overlay.
-                Sits above the iframe and intercepts all clicks/taps so the
-                user can never trigger YouTube's title bar, pause button,
-                progress scrubber, or any other native chrome — the video
-                simply plays through untouched.
-              */}
-              <div
-                className="absolute top-0 left-0 w-full h-full z-10 cursor-default pointer-events-auto"
-                aria-hidden="true"
-              />
+              {/* Custom Overlay & Play Button (Shown until user clicks play) */}
+              {!isPlaying && (
+                <div 
+                  onClick={handleStartPlay}
+                  className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px] cursor-pointer group/overlay transition-all hover:bg-black/40"
+                >
+                  {/* Thumbnail / Poster Image Background Fallback */}
+                  <img
+                    src={`https://img.youtube.com/vi/${content.youtube_id}/maxresdefault.jpg`}
+                    alt={content.video_title}
+                    className="absolute inset-0 w-full h-full object-cover opacity-60"
+                  />
+                  
+                  <div className="relative z-10 flex flex-col items-center gap-4">
+                    {/* Glowing Play Button Icon */}
+                    <div className="h-16 w-16 rounded-full bg-brand-primary/90 text-black flex items-center justify-center shadow-2xl transition-transform transform group-hover/overlay:scale-110">
+                      <Play className="h-7 w-7 fill-current ml-1" />
+                    </div>
+                    <span className="font-mono text-xs uppercase tracking-widest text-white bg-black/80 px-4 py-2 border border-white/20 shadow-lg">
+                      Meet your coach Surya
+                    </span>
+                  </div>
+                </div>
+              )}
 
-              {/* Custom mute/unmute control — the only interactive element allowed */}
-              <button
-                type="button"
-                onClick={toggleMute}
-                aria-label={wantsSound ? 'Mute video' : 'Unmute video'}
-                aria-pressed={wantsSound}
-                className="absolute bottom-3 right-3 z-20 flex items-center justify-center h-9 w-9 rounded-none bg-black/70 border border-white/20 text-white hover:bg-black/90 transition-colors backdrop-blur-sm"
-              >
-                {isAudible ? (
-                  <Volume2 className="h-4 w-4" />
-                ) : (
-                  <VolumeX className="h-4 w-4" />
-                )}
-              </button>
+              {/* Interaction blocker so user cannot touch YouTube chrome while playing */}
+              {isPlaying && (
+                <div
+                  className="absolute top-0 left-0 w-full h-full z-10 cursor-default pointer-events-auto"
+                  aria-hidden="true"
+                />
+              )}
+
+              {/* Mute/Unmute toggle button (Visible while playing) */}
+              {isPlaying && (
+                <button
+                  type="button"
+                  onClick={toggleMute}
+                  aria-label={wantsSound ? 'Mute video' : 'Unmute video'}
+                  aria-pressed={wantsSound}
+                  className="absolute bottom-3 right-3 z-30 flex items-center justify-center h-9 w-9 rounded-none bg-black/70 border border-white/20 text-white hover:bg-black/90 transition-colors backdrop-blur-sm"
+                >
+                  {wantsSound ? (
+                    <Volume2 className="h-4 w-4 text-brand-primary" />
+                  ) : (
+                    <VolumeX className="h-4 w-4" />
+                  )}
+                </button>
+              )}
+
             </div>
-
           </div>
         </motion.div>
       </div>
