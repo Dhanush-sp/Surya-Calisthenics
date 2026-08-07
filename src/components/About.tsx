@@ -15,22 +15,22 @@ interface AboutProps {
 export default function About({ onCtaClick }: AboutProps) {
   const content = {
     coach_name: 'Coach Surya',
-    coach_title: 'Elite Calisthenics Specialist & Founder',
+    coach_title: 'Advanced Calisthenics Specialist & Founder',
     coach_photo: '/images/coach.jpeg',
     certification_photo: '/images/certificate.jpeg',
     bio_heading: 'Meet Your Coach',
-    bio_paragraph_1: "Hey, I'm Surya. I spent over a decade perfecting bodyweight training to unlock movements most think are reserved for elite gymnasts. My mission is to demystify advanced calisthenics, turning complex skills into scientific, progressive training steps anyone can follow.",
+    bio_paragraph_1: "Hi, I'm Surya—a WSWCF Certified Calisthenics Coach.My mission is to help people build real strength, master bodyweight skills, and unlock their full potential through structured, personalized coaching. I believe every athlete progresses differently, so I focus on creating training programs that are practical, sustainable, and tailored to individual goals. Whether you're starting your first pull-up or working toward advanced calisthenics skills, I'm here to help you train smarter, stay consistent, and enjoy the journey.",
     bio_paragraph_2: "Having coached over 500+ athletes worldwide through mobile-optimized virtual programs, I focus on building raw, functional strength, bulletproofing joints, and developing a shredded, high-performance physique without the need for heavy weights."
   };
   const highlights = [
     {
       icon: Star,
-      title: '10+ Years Calisthenics Mastery',
-      desc: 'A decade of training, learning, and perfecting the art of bodyweight strength.',
+      title: '3+ Years Calisthenics Mastery',
+      desc: 'Years of training, learning, and perfecting the art of bodyweight strength.',
     },
     {
       icon: Globe,
-      title: '500+ Athletes Coached Globally',
+      title: '100+ Athletes Coached Globally',
       desc: 'Helping athletes from different countries achieve their fitness and skill goals.',
     },
     {
@@ -103,9 +103,9 @@ export default function About({ onCtaClick }: AboutProps) {
             <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text mb-2 leading-tight">
               Meet Coach <span className="text-brand-primary">Surya</span>
             </h2>
-            <p className="text-brand-muted font-mono text-[10px] tracking-[0.2em] uppercase mb-8 font-bold">
+            {/* <p className="text-brand-muted font-mono text-[10px] tracking-[0.2em] uppercase mb-8 font-bold">
               {content.coach_title}
-            </p>
+            </p> */}
 
             <div className="space-y-6 text-brand-muted font-sans text-sm md:text-base leading-relaxed font-light">
               <h3 className="text-lg font-normal text-brand-text font-serif italic tracking-tight">

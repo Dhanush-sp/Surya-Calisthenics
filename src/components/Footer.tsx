@@ -40,7 +40,7 @@ export default function Footer({ onJoinCtaClick }: FooterProps) {
               <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase">SURYA CALISTHENICS</span>
             </div>
             <p className="text-brand-muted text-xs md:text-sm max-w-sm leading-relaxed font-light">
-              Scientific calisthenics progressions designed to unlock elite bodyweight control, shredded muscle development, and joint longevity on the bars.
+              Scientific calisthenics progressions designed to unlock advanced bodyweight control, shredded muscle development, and joint longevity on the bars.
             </p>
           </div>
 

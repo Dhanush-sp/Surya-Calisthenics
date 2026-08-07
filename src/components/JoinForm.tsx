@@ -107,7 +107,7 @@ The user is being redirected to complete their Google Onboarding form.`
                 Apply for the Protocol
               </h3>
               <p className="text-brand-muted text-xs md:text-sm mt-1 font-light">
-                Enter your details to request a personalized strategy check-in. Ready to transition to bodyweight elite?
+                Enter your details to request a personalized strategy check-in. Ready to transition to bodyweight Advanced?
               </p>
             </div>
 
@@ -222,7 +222,7 @@ The user is being redirected to complete their Google Onboarding form.`
                     <option value="0-5">0 - 5 Reps</option>
                     <option value="6-12">6 - 12 Reps</option>
                     <option value="12-20">12 - 20 Reps</option>
-                    <option value="20+">20+ Elite Reps</option>
+                    <option value="20+">20+ Advanced Reps</option>
                   </select>
                 </div>
               </div>

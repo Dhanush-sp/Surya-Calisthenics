@@ -28,9 +28,9 @@ interface TransformationsProps {
 }
 
 const STATS = [
-  { icon: Users, value: '125K+', label: 'Community' },
+  { icon: Users, value: '132K+', label: 'Community' },
   { icon: Trophy, value: '100+', label: 'Transformations' },
-  { icon: CalendarCheck, value: '5+', label: 'Years Experience' },
+  { icon: CalendarCheck, value: '3+', label: 'Years Experience' },
   { icon: Star, value: '5.0', label: 'Client Rating' },
 ];
 

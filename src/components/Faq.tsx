@@ -17,7 +17,7 @@ export default function Faq(_: FaqProps) {
     { question: 'Do I need a gym?', answer: 'No, you can train anywhere using your body weight, though a pull-up bar or resistance bands help.' },
     { question: 'Can I lose fat?', answer: 'Yes, high-energy bodyweight workouts burn calories, boost your metabolism, and help strip body fat.' },
     { question: 'Can I build muscle?', answer: 'Yes, by applying progressive overload with tougher variations and leverage, you will build lean muscle.' },
-    { question: 'How many days per week?', answer: '3 to 4 days per week is ideal for steady progress and proper recovery.' },
+    { question: 'How many days per week?', answer: '5 to 6 days per week is ideal for steady progress and proper recovery.' },
     { question: 'Do you provide nutrition?', answer: 'Yes, I provide clear nutrition guidelines and calorie/macro targets to support your goals.' },
   ];
   const [openIndex, setOpenIndex] = useState<number | null>(0);

@@ -72,7 +72,7 @@ const DEFAULT_HERO: HeroContentV2 = {
   headlineRedWord: 'Calisthenics.',
   subheadline: 'Personalized coaching. Real results. Stronger every day.',
   paragraph:
-    'I help you build real strength, unlock elite skills, and transform your body through structured calisthenics training, nutrition guidance, and 1-on-1 support tailored to your goals.',
+    'I help you build real strength, unlock advanced skills, and transform your body through structured calisthenics training, nutrition guidance, and 1-on-1 support tailored to your goals.',
   image: heroImage,
   primaryCtaText: 'Start Your Transformation',
   secondaryCtaText: 'View Client Results',
@@ -80,7 +80,7 @@ const DEFAULT_HERO: HeroContentV2 = {
     { icon: 'users', value: '132K+', label: 'Community on Instagram' },
     { icon: 'badge', value: 'WSWCF', label: 'Certified Calisthenics Coach' },
     { icon: 'user', value: '100+', label: 'Students Trained' },
-    { icon: 'calendar', value: '5+', label: 'Years of Training Experience' },
+    { icon: 'calendar', value: '3+', label: 'Years of Training Experience' },
   ],
   features: [
     { icon: 'muscle', title: 'Build Muscle & Strength', text: 'Gain lean muscle and functional strength with bodyweight training.' },

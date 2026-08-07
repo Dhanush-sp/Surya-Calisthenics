@@ -80,10 +80,10 @@ export default function ProgramDetails({ onCtaClick }: ProgramDetailsProps) {
                 {content.eyebrow}
               </p>
               <h2 className="mt-3 text-3xl sm:text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text leading-tight">
-                {content.section_title}
+                Inside the Coaching <span className='text-brand-primary'>Experience</span>
               </h2>
               <div className="mt-6 h-0.5 w-12 bg-[#ea1d1d]" />
-              <div className="mt-6 max-w-3xl space-y-5 text-sm md:text-base leading-relaxed text-brand-muted font-sans font-light">
+              <div className="mt-6 max-w-3xl space-y-5 text-xs md:text-base leading-relaxed text-brand-muted font-sans font-light">
                 <p>{content.section_subtitle}</p>
                 <p>
                   Every session is designed to help you build measurable strength,
@@ -103,7 +103,7 @@ export default function ProgramDetails({ onCtaClick }: ProgramDetailsProps) {
                     transition={{ duration: 0.18, ease: 'easeOut' }}
                     className="min-h-[185px] sm:min-h-[220px] border-r border-b border-brand-border px-4 py-5 sm:px-6 sm:py-8 md:px-7 md:py-9"
                   >
-                    <div className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center text-brand-primary">
+                    <div className="flex h-7 w-7 sm:h-11 sm:w-11 items-center justify-center text-brand-primary">
                       <IconComponent className="h-7 w-7 sm:h-10 sm:w-10 stroke-[1.8]" />
                     </div>
                     <h3 className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg font-serif italic font-normal tracking-tight text-brand-text leading-tight">
