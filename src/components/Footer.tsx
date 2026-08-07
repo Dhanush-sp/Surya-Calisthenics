@@ -13,8 +13,8 @@ interface FooterProps {
 
 export default function Footer({ onJoinCtaClick }: FooterProps) {
   const content = {
-    instagram_url: 'https://instagram.com/calisthenicscoach',
-    youtube_url: 'https://www.youtube.com',
+    instagram_url: 'https://www.instagram.com/surya_calisthenics/',
+    youtube_url: 'https://www.youtube.com/@suryacalisthenics',
     contact_email: 'contact@bodyweightathlete.com',
     contact_phone: '+1 (555) 019-3829',
     copyright: '© 2026 Surya Calisthenics. All rights reserved.',

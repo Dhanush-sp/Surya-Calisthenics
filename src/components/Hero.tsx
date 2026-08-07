@@ -22,16 +22,9 @@ import {
 
 const heroImage = new URL('../images/hero-image.png', import.meta.url).href;
 
-// lucide-react has no TikTok glyph — minimal inline icon so the social row matches the reference exactly.
-const TikTokIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 16 16" fill="currentColor" className={className} aria-hidden="true">
-    <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z" />
-  </svg>
-);
-
 type StatIcon = 'users' | 'badge' | 'user' | 'calendar';
 type FeatureIcon = 'muscle' | 'skill' | 'nutrition' | 'support';
-type SocialPlatform = 'instagram' | 'youtube' | 'tiktok';
+type SocialPlatform = 'instagram' | 'youtube';
 
 interface HeroStat {
   icon: StatIcon;
@@ -84,7 +77,7 @@ const DEFAULT_HERO: HeroContentV2 = {
   primaryCtaText: 'Start Your Transformation',
   secondaryCtaText: 'View Client Results',
   stats: [
-    { icon: 'users', value: '125K+', label: 'Community on Instagram' },
+    { icon: 'users', value: '132K+', label: 'Community on Instagram' },
     { icon: 'badge', value: 'WSWCF', label: 'Certified Calisthenics Coach' },
     { icon: 'user', value: '100+', label: 'Students Trained' },
     { icon: 'calendar', value: '5+', label: 'Years of Training Experience' },
@@ -97,9 +90,8 @@ const DEFAULT_HERO: HeroContentV2 = {
   ],
   followLabel: 'Follow My Journey',
   socials: [
-    { platform: 'instagram', url: 'https://instagram.com/calisthenicscoach' },
-    { platform: 'youtube', url: 'https://www.youtube.com' },
-    { platform: 'tiktok', url: 'https://www.tiktok.com' },
+    { platform: 'instagram', url: 'https://www.instagram.com/surya_calisthenics/' },
+    { platform: 'youtube', url: 'https://www.youtube.com/@suryacalisthenics' },
   ],
   handle: '/SURYA_CALISTHENICS',
 };
@@ -121,7 +113,6 @@ const FeatureIconMap: Record<FeatureIcon, typeof Dumbbell> = {
 const SocialIconMap: Record<SocialPlatform, React.ComponentType<{ className?: string }>> = {
   instagram: Instagram,
   youtube: Youtube,
-  tiktok: TikTokIcon,
 };
 
 interface HeroProps {

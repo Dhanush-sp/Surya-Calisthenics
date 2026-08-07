@@ -13,47 +13,77 @@ const AUTO_SCROLL_SPEED = 0.55;
 
 const DEFAULT_VIDEO_TESTIMONIALS = {
   section_eyebrow: 'Clients Progress Library',
-  section_title: 'Progress in Motion',
+  section_title: 'ATHLETE EVOLUTION',
   section_subtitle: 'Drag or swipe the video horizontally to slide through progress clips.',
   items: [
     {
-      athlete: 'Marcus T.',
-      badge: 'MUSCLE-UP',
-      videoId: '78zo1AeWSc8',
+      athlete: 'Sudarson',
+      badge: 'FROG STAND',
+      videoId: 'K19dK9baLPA',
       videoDuration: '2:14',
       weekLabel: 'WEEK 12 • MUSCLE-UP PROGRESS',
-      statHeadline: 'From 0 to 3 Strict Muscle-Ups',
-      statSubtext: '12 Weeks Transformation',
+      statHeadline: 'Frogstand',
+      statSubtext: '4 Months',
       desc: 'Demonstrating solid front lever control and explosive muscle-up strength after consistent progressions.'
     },
     {
-      athlete: 'Sarah K.',
-      badge: 'HANDSTAND',
-      videoId: 'p9gYwJ8I9uY',
+      athlete: 'Nandha',
+      badge: 'HEADSTAND',
+      videoId: 'isNndbvS5SI',
       videoDuration: '1:58',
       weekLabel: 'WEEK 16 • HANDSTAND BREAKTHROUGH',
-      statHeadline: 'Built shoulder stability and balance',
-      statSubtext: '16 Weeks Progress',
+      statHeadline: 'Built Headstand Progress',
+      statSubtext: 'age 28',
       desc: 'Achieving clean freestanding holds and tight body alignment through targeted shoulder work.'
     },
     {
-      athlete: 'Alex R.',
-      badge: 'STRENGTH',
-      videoId: 'EGMG_7m_xH4',
+      athlete: 'Ishal',
+      badge: 'MUSCLE-UP',
+      videoId: 'yyx9FUqmfV4',
       videoDuration: '2:05',
-      weekLabel: 'WEEK 24 • STRENGTH EVOLUTION',
-      statHeadline: 'Clean gymnastic ring transitions',
-      statSubtext: '24 Weeks Mastery',
+      weekLabel: '15 age',
+      statHeadline: 'Muscle-Up Unlocked',
+      statSubtext: '15 age',
       desc: 'Executing fluid ring muscle-up flows and stable support holds after systematic strength buildup.'
     },
     {
-      athlete: 'David L.',
-      badge: 'MOBILITY',
-      videoId: 'j71XgK-9Kco',
+      athlete: 'Ishal',
+      badge: 'Backlever',
+      videoId: 'YxOOe6O8k44',
       videoDuration: '1:52',
       weekLabel: 'WEEK 8 • MOBILITY UPGRADE',
       statHeadline: 'Pain-free overhead range',
-      statSubtext: '8 Weeks Reset',
+      statSubtext: '15 years old',
+      desc: 'Restoring overhead movement quality and smooth press patterns through mobility-focused training.'
+    },
+    {
+      athlete: 'From USA',
+      badge: 'HAND STAND',
+      videoId: 'iS2dAzsx2qo',
+      videoDuration: '1:52',
+      weekLabel: 'PROGRESS • HANDSTAND',
+      statHeadline: 'PROGRESS • HANDSTAND',
+      statSubtext: 'USA',
+      desc: 'Restoring overhead movement quality and smooth press patterns through mobility-focused training.'
+    },
+    {
+      athlete: 'Nithyan',
+      badge: 'FROG STAND',
+      videoId: 'pO3EWeTYedE',
+      videoDuration: '1:52',
+      weekLabel: 'PROGRESS • HANDSTAND',
+      statHeadline: 'PROGRESS • FROGSTAND',
+      statSubtext: 'age 38',
+      desc: 'Restoring overhead movement quality and smooth press patterns through mobility-focused training.'
+    },
+    {
+      athlete: 'Nivin',
+      badge: 'L-SIT',
+      videoId: 'c0kR05isrYE',
+      videoDuration: '1:52',
+      weekLabel: 'PROGRESS • HANDSTAND',
+      statHeadline: 'PROGRESS • L-SIT',
+      statSubtext: 'age 33',
       desc: 'Restoring overhead movement quality and smooth press patterns through mobility-focused training.'
     }
   ]
@@ -289,18 +319,15 @@ export default function VideoTestimonials() {
         <span className="inline-flex items-center gap-1.5 text-[9px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase mb-1.5">
           <Film className="h-3 w-3 text-brand-primary" /> {section_eyebrow}
         </span>
-        <h2 className="text-3xl md:text-5xl font-serif italic font-normal tracking-tight text-brand-text leading-tight">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-serif italic font-normal tracking-tight text-brand-text leading-tight">
           {section_title}
         </h2>
-        <p className="text-brand-muted text-xs md:text-sm max-w-sm mx-auto mt-4 font-light">
+        <p className="text-brand-muted text-[11px] md:text-sm max-w-sm mx-auto mt-4 font-light">
           {section_subtitle}
         </p>
       </div>
 
       <div className="relative w-full overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-28 bg-gradient-to-r from-brand-bg via-brand-bg/80 to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-28 bg-gradient-to-l from-brand-bg via-brand-bg/80 to-transparent z-20 pointer-events-none" />
-
         <div
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -326,7 +353,7 @@ export default function VideoTestimonials() {
                       setIsExpanded(true);
                     }
                   }}
-                  className="shrink-0 w-[180px] xs:w-[200px] sm:w-[220px] md:w-[250px] lg:w-[280px] aspect-[9/16] rounded-none overflow-hidden border border-brand-border bg-brand-card shadow-xl relative text-left"
+                  className="shrink-0 w-[160px] xs:w-[180px] sm:w-[200px] md:w-[250px] lg:w-[280px] aspect-[9/16] rounded-none overflow-hidden border border-brand-border bg-brand-card shadow-xl relative text-left"
                 >
                   <img
                     src={`https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`}
@@ -337,33 +364,34 @@ export default function VideoTestimonials() {
                   />
                   <div className="absolute inset-0 bg-black/20" />
 
-                  <div className="absolute top-3 left-3 z-10 rounded-none bg-black/70 border border-white/15 px-2 py-1 text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-white">
+                  <div className="absolute top-3 left-3 z-10 rounded-none bg-black/70 border border-white/15 px-2 py-1 text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-white">
                     {item.badge}
                   </div>
-                  <div className="absolute top-3 right-3 z-10 rounded-none bg-black/70 border border-white/15 px-2 py-1 text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-white">
+                  {/* <div className="absolute top-3 right-3 z-10 rounded-none bg-black/70 border border-white/15 px-2 py-1 text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-white">
                     {item.videoDuration}
-                  </div>
+                  </div> */}
 
                   <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
                     <motion.div
                       animate={{ scale: [1, 1.08, 1] }}
                       transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                      className="h-16 w-16 rounded-full bg-brand-primary flex items-center justify-center shadow-xl border border-white/20"
+                      className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-brand-primary flex items-center justify-center shadow-xl border border-white/20"
                     >
-                      <Play className="h-6 w-6 text-white" />
+                      <Play className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
                     </motion.div>
                   </div>
 
-                  <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black via-black/80 to-transparent px-4 pb-4 pt-24">
-                    <h3 className="text-lg font-bold text-white leading-tight">{item.athlete}</h3>
-                    <p className="mt-2 text-[10px] uppercase tracking-[0.26em] text-brand-primary font-bold">
+                  <div className="absolute inset-x-0 bottom-0 h-32 sm:h-36 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-0 bottom-0 z-20 px-4 pb-4 pt-24">
+                    <h3 className="text-sm md:text-base font-bold text-white leading-tight">{item.athlete}</h3>
+                    {/* <p className="mt-2 text-[8px] md:text-[10px] uppercase tracking-[0.22em] text-brand-primary font-bold">
                       {item.weekLabel}
-                    </p>
-                    <div className="mt-3 flex items-start gap-3">
-                      <div className="h-9 w-9 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-brand-primary">
-                        <TrendingUp className="h-4 w-4" />
+                    </p> */}
+                    <div className="mt-3 flex items-start gap-2.5">
+                      <div className="h-8 w-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-brand-primary">
+                        <TrendingUp className="h-3.5 w-3.5" />
                       </div>
-                      <div className="space-y-1 text-white/90 text-[11px] leading-snug">
+                      <div className="space-y-1 text-white/90 text-[9px] md:text-[11px] leading-snug">
                         <p className="font-semibold text-white">{item.statHeadline}</p>
                         <p className="text-zinc-300">{item.statSubtext}</p>
                       </div>
@@ -378,7 +406,7 @@ export default function VideoTestimonials() {
         <button
           type="button"
           onClick={() => nudgeSlide('prev')}
-          className="absolute left-3 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/15 border border-white/10 p-2 text-white shadow-xl hover:bg-white/20 transition-colors"
+          className="absolute left-2 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/15 border border-white/10 p-2 text-white shadow-xl hover:bg-white/20 transition-colors"
           aria-label="Previous testimonials"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -387,7 +415,7 @@ export default function VideoTestimonials() {
         <button
           type="button"
           onClick={() => nudgeSlide('next')}
-          className="absolute right-3 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/15 border border-white/10 p-2 text-white shadow-xl hover:bg-white/20 transition-colors"
+          className="absolute right-2 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/15 border border-white/10 p-2 text-white shadow-xl hover:bg-white/20 transition-colors"
           aria-label="Next testimonials"
         >
           <ChevronRight className="h-4 w-4" />
@@ -463,18 +491,18 @@ export default function VideoTestimonials() {
                 </button>
               </div>
 
-              <div className="mt-4 rounded-none border border-white/10 bg-[#0D0D0D] p-5 text-white">
-                <p className="text-[10px] uppercase tracking-[0.3em] text-brand-primary font-bold mb-2">
+              <div className="mt-4 rounded-none border border-white/10 bg-[#0D0D0D] p-4 text-white">
+                <p className="text-[9px] uppercase tracking-[0.3em] text-brand-primary font-bold mb-2">
                   {currentClient.weekLabel}
                 </p>
-                <h3 className="text-2xl font-serif italic font-normal leading-tight">
+                <h3 className="text-xl md:text-2xl font-serif italic font-normal leading-tight">
                   {currentClient.athlete}
                 </h3>
-                <div className="mt-4 flex items-start gap-3">
-                  <div className="h-11 w-11 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-brand-primary">
-                    <TrendingUp className="h-5 w-5" />
+                <div className="mt-4 flex items-start gap-2.5">
+                  <div className="h-10 w-10 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-brand-primary">
+                    <TrendingUp className="h-4 w-4" />
                   </div>
-                  <div className="space-y-1 text-sm leading-snug text-zinc-300">
+                  <div className="space-y-1 text-sm md:text-base leading-snug text-zinc-300">
                     <p className="font-semibold text-white">{currentClient.statHeadline}</p>
                     <p>{currentClient.statSubtext}</p>
                   </div>

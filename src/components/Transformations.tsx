@@ -17,6 +17,10 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { TransformationItem } from '../types';
+import transform1 from '../images/transform1.png';
+import transform2 from '../images/transform2.png';
+import transform3 from '../images/transform3.jpg';
+import transform4 from '../images/transform4.png';
 
 interface TransformationsProps {
   items?: TransformationItem[];
@@ -33,24 +37,24 @@ const STATS = [
 export default function Transformations({ items: itemsProp, onCtaClick }: TransformationsProps) {
   const defaultItems: TransformationItem[] = [
     {
-      img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop',
-      name: 'Marcus T. - 12 Weeks',
-      desc: 'Went from 0 to 12 clean pull-ups, dropping 8% body fat.'
+      img:  transform1,
+      name: ' Nanthesh',
+      desc: 'Meet Nanthesh, all the way from the Netherlands! Over the past three months, we dove into online calisthenics training together, starting with a full assessment of his pushing, pulling, and overall endurance. From those fundamentals, we crafted a personalized plan that’s taken him from the basics right into the realm of intermediate skills. It’s been amazing to watch his transformation, and there’s so much more to come. Stay tuned for his journey!'
     },
     {
-      img: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop',
-      name: 'Sarah K. - 16 Weeks',
-      desc: 'Achieved a solid 15-second freestanding handstand and elite core power.'
+      img: transform2,
+      name: 'Bharath, from Coorg, Karnataka.',
+      desc: 'It’s been a gradual process, but the overall progress has been very positive. With a strong focus on injury prevention and improved body awareness, he’s now able to train more effectively, maintaining better full-body control and performance.'
     },
     {
-      img: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=600&auto=format&fit=crop',
-      name: 'Alex R. - 24 Weeks',
-      desc: 'Mastered the full muscle-up and unlocked advanced gymnastic ring flows.'
+      img: transform3,
+      name: 'From Canada',
+      desc: "Three months ago, he started training with me. He struggled a bit at first, but then he picked up and committed to a consistent training and diet, which led to this level of progress. The basics are fully completed, and he’s currently working on the intermediate level."
     },
     {
-      img: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop',
-      name: 'David L. - 8 Weeks',
-      desc: 'Rebuilt posture, cured shoulder pain, and unlocked elite body control.'
+      img: transform4,
+      name: 'Sidharth',
+      desc: 'Muscle-ups, Handstands, and more! Sidharth has been training with me for the past 3 months, and his progress has been nothing short of amazing. From mastering the basics to achieving advanced skills, he’s shown incredible dedication and hard work. I’m proud to have been a part of his journey and can’t wait to see what he accomplishes next!'
     }
   ];
   const items: TransformationItem[] = itemsProp && itemsProp.length > 0 ? itemsProp : defaultItems;
@@ -179,11 +183,9 @@ export default function Transformations({ items: itemsProp, onCtaClick }: Transf
     setIsDragging(false);
   };
 
-  // "View More Stories" hands off to the video testimonials carousel — the
-  // next place on the page with more client proof.
+  // "View More Stories" opens the client results Instagram page.
   const scrollToMoreStories = () => {
-    const el = document.getElementById('video-testimonials');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    window.open('https://www.instagram.com/surya_calis_client_result?igsh=ZW4wd21rOGF6MXp2', '_blank', 'noopener,noreferrer');
   };
 
   if (items.length === 0) {
@@ -222,11 +224,7 @@ export default function Transformations({ items: itemsProp, onCtaClick }: Transf
       {/* Swipeable & Scroll-Synced Track (transform-driven, infinite loop) */}
       <div className="relative w-full overflow-hidden">
 
-        {/* Soft edge blur fading on left/right borders */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 md:w-32 bg-gradient-to-r from-brand-bg via-brand-bg/40 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-8 md:w-32 bg-gradient-to-l from-brand-bg via-brand-bg/40 to-transparent z-10 pointer-events-none" />
-
-        {/* Draggable viewport — overflow hidden, no native scrollbar/scroll-snap needed */}
+          {/* Draggable viewport — overflow hidden, no native scrollbar/scroll-snap needed */}
         <div
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -255,15 +253,15 @@ export default function Transformations({ items: itemsProp, onCtaClick }: Transf
                   {/* Card Header */}
                   <div className="p-3 border-b border-brand-border bg-brand-card/50">
                     <div className="flex items-center justify-between text-[8px] font-mono text-brand-muted tracking-wider mb-1">
-                      <span className={`inline-flex items-center gap-0.5 font-bold tracking-widest uppercase text-[7px] px-2 py-0.5 ${
+                      {/* <span className={`inline-flex items-center gap-0.5 font-bold tracking-widest uppercase text-[7px] px-2 py-0.5 ${
                         stage === 'AFTER'
                           ? 'bg-brand-primary text-white font-extrabold'
                           : 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20'
                       }`}>
                         {stage === 'AFTER' && <Sparkles className="h-2 w-2" />}
                         {stage}
-                      </span>
-                      <span className="font-bold">{duration}</span>
+                      </span> */}
+                      {/* <span className="font-bold">{duration}</span> */}
                     </div>
                     <h4 className="text-xs md:text-sm font-serif italic font-normal text-brand-text tracking-tight truncate">
                       {item.name}
@@ -284,7 +282,6 @@ export default function Transformations({ items: itemsProp, onCtaClick }: Transf
                           : 'filter brightness-[0.95] contrast-[1.1]'
                       }`}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" />
                   </div>
 
                   {/* Card Description */}
@@ -293,8 +290,8 @@ export default function Transformations({ items: itemsProp, onCtaClick }: Transf
                       {item.desc}
                     </p>
                     <div className="flex items-center justify-between text-[8px] font-mono text-brand-muted tracking-wider pt-2 border-t border-brand-border">
-                      <span className="opacity-80">PROGRAM</span>
-                      <span className="text-brand-primary font-bold tracking-widest uppercase text-[8px] font-mono">{program}</span>
+                      {/* <span className="opacity-80">PROGRAM</span>
+                      <span className="text-brand-primary font-bold tracking-widest uppercase text-[8px] font-mono">{program}</span> */}
                     </div>
                   </div>
                 </motion.div>

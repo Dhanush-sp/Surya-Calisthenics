@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
-import { Star, Quote, ShieldCheck } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ReviewsProps {}
 
@@ -36,81 +37,195 @@ export default function Reviews(_: ReviewsProps) {
     }
   ];
 
-  // Duplicate the list of reviews to create a seamless infinite loop visual effect
-  const marqueeItems = [...items, ...items, ...items];
+  const total = items.length;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const dragStartXRef = useRef<number | null>(null);
+
+  const goTo = (index: number) => {
+    setCurrentIndex(((index % total) + total) % total);
+  };
+
+  const handlePrev = () => goTo(currentIndex - 1);
+  const handleNext = () => goTo(currentIndex + 1);
+
+  const prevIndex = (currentIndex - 1 + total) % total;
+  const nextIndex = (currentIndex + 1) % total;
+
+  // Simple threshold-based swipe: measure start/end X on pointerdown/pointerup.
+  // No setPointerCapture here on purpose — capturing the pointer would retarget
+  // pointerup away from the mini-card buttons and silently break their onClick.
+  const handleSwipeStart = (e: React.PointerEvent<HTMLDivElement>) => {
+    dragStartXRef.current = e.clientX;
+  };
+
+  const handleSwipeEnd = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (dragStartXRef.current === null) return;
+    const delta = e.clientX - dragStartXRef.current;
+    dragStartXRef.current = null;
+
+    if (Math.abs(delta) < 50) return; // treat as a click/tap, not a swipe
+    if (delta > 0) handlePrev();
+    else handleNext();
+  };
+
+  const renderStars = (size: string) => (
+    <div className="flex text-brand-primary gap-0.5">
+      {[...Array(5)].map((_, i) => (
+        <Star key={i} className={`${size} fill-current`} />
+      ))}
+    </div>
+  );
 
   return (
-    <section className="py-24 bg-brand-bg overflow-hidden relative border-t border-b border-brand-border" id="reviews">
-      
+    <section className="py-24 bg-brand-card overflow-hidden relative border-t border-b border-brand-border" id="reviews">
+
       {/* Section Header */}
-      <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
-        <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase block mb-3">
-          ATHLETE TESTIMONIALS
+      <div className="max-w-3xl mx-auto px-6 mb-16 text-center">
+        <span className="text-[11px] md:text-xs font-mono font-bold tracking-[0.4em] text-brand-primary uppercase block mb-4">
+          Testimonials
         </span>
-        <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text">
+        <h2 className="text-4xl md:text-6xl font-serif italic tracking-tight text-brand-text mb-5">
           What My Athletes Say
         </h2>
-        <p className="text-brand-muted text-sm max-w-lg mx-auto mt-4 font-sans font-light">
+        <p className="text-brand-muted text-sm md:text-base font-sans font-light leading-relaxed max-w-xl mx-auto">
           Every review reflects a journey of consistency, discipline, and progress. Hear directly from athletes who transformed their strength, confidence, and performance through personalized coaching.
         </p>
       </div>
 
-      {/* Infinite Horizontal Marquee Container */}
-      <div className="relative w-full overflow-hidden flex py-4 pointer-events-auto">
-        
-        {/* Soft edge gradients to fade out the marquee on left and right borders */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-brand-bg to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-brand-bg to-transparent z-10 pointer-events-none" />
+      {/* Spotlight Carousel */}
+      <div className="relative max-w-6xl mx-auto px-4">
 
-        {/* Scrolling Track */}
-        <div className="flex gap-6 animate-marquee hover:[animation-play-state:paused] whitespace-nowrap">
-          {marqueeItems.map((review, idx) => (
-            <div
-              key={idx}
-              className="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 bg-brand-card border border-brand-border rounded-none p-6 md:p-7 relative flex flex-col justify-between shadow-xl select-none whitespace-normal transition-all duration-300 hover:border-brand-primary/40"
+        {/* Nav Arrows */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          className="absolute left-0 sm:left-1 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-full bg-white text-brand-primary shadow-xl transition-transform hover:scale-105 cursor-pointer"
+          aria-label="Previous testimonial"
+        >
+          <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
+        </button>
+
+        <button
+          type="button"
+          onClick={handleNext}
+          className="absolute right-0 sm:right-1 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-full bg-white text-brand-primary shadow-xl transition-transform hover:scale-105 cursor-pointer"
+          aria-label="Next testimonial"
+        >
+          <ChevronRight className="h-5 w-5" strokeWidth={2.5} />
+        </button>
+
+        {/* Three-slot row: muted prev — spotlighted current — muted next */}
+        <div
+          onPointerDown={handleSwipeStart}
+          onPointerUp={handleSwipeEnd}
+          className="flex items-center justify-center gap-3 sm:gap-6 md:gap-10 touch-pan-y select-none py-6"
+          style={{ touchAction: 'pan-y' }}
+        >
+          {/* Prev (muted) card */}
+          <AnimatePresence initial={false}>
+            <motion.button
+              key={`prev-${prevIndex}`}
+              type="button"
+              onClick={handlePrev}
+              layout
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              whileHover={{ opacity: 0.75 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="hidden sm:flex relative flex-col text-left w-[200px] md:w-[250px] shrink-0 bg-brand-card border border-brand-border/60 rounded-none p-5 md:p-6 mt-8 opacity-50 scale-[0.92] shadow-sm cursor-pointer"
+              aria-label={`View testimonial from ${items[prevIndex].author}`}
             >
-              {/* Background Quote Icon Accent */}
-              <Quote className="absolute right-5 top-5 h-10 w-10 text-brand-primary/5 pointer-events-none" />
-
-              {/* Red Star Rating */}
-              <div className="flex text-brand-primary gap-0.5 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-3.5 w-3.5 fill-current" />
-                ))}
-              </div>
-
-              {/* Review Text */}
-              <p className="text-brand-text font-sans text-sm md:text-base leading-relaxed mb-6 italic font-light">
-                "{review.text}"
+              <Quote className="absolute right-4 top-4 h-7 w-7 text-brand-primary/5 pointer-events-none" />
+              <div className="mb-3">{renderStars('h-2.5 w-2.5')}</div>
+              <p className="text-brand-text text-xs leading-relaxed italic font-light line-clamp-5 mb-4">
+                "{items[prevIndex].text}"
               </p>
-
-              {/* Author Info */}
-              <div className="flex items-center gap-2.5 mt-auto border-t border-brand-border pt-4">
-                <div className="h-7 w-7 rounded-none bg-brand-primary flex items-center justify-center text-[10px] font-bold text-white font-mono border border-brand-primary uppercase">
-                  {review.author.slice(0, 2).toUpperCase()}
+              <div className="flex items-center gap-2 border-t border-brand-border pt-3 mt-auto">
+                <div className="h-6 w-6 flex items-center justify-center bg-brand-primary text-white text-[9px] font-bold font-mono uppercase">
+                  {items[prevIndex].author.slice(0, 2).toUpperCase()}
                 </div>
-                <div>
-                  <h4 className="text-xs font-bold text-brand-text font-sans">
-                    {review.author}
-                  </h4>
-                </div>
+                <span className="text-[11px] font-bold text-brand-text">{items[prevIndex].author}</span>
               </div>
-            </div>
-          ))}
+            </motion.button>
+          </AnimatePresence>
+
+          {/* Active (spotlighted) card */}
+          <AnimatePresence initial={false}>
+            <motion.div
+              key={`current-${currentIndex}`}
+              layout
+              initial={{ opacity: 0, scale: 0.94, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: -10 }}
+              transition={{ duration: 0.42, ease: 'easeOut' }}
+              className="relative z-20 w-[280px] xs:w-[320px] sm:w-[380px] md:w-[440px] shrink-0 bg-white border border-brand-border rounded-none p-7 md:p-9 shadow-2xl flex flex-col"
+            >
+              <Quote className="absolute right-6 top-6 md:right-7 md:top-7 h-10 w-10 md:h-12 md:w-12 text-brand-primary/5 pointer-events-none" />
+              <div className="mb-5">{renderStars('h-4 w-4 md:h-[18px] md:w-[18px]')}</div>
+              <p className="text-brand-text text-sm md:text-base leading-relaxed italic font-sans font-light mb-8">
+                "{items[currentIndex].text}"
+              </p>
+              <div className="flex items-center gap-3 border-t border-brand-border pt-5 mt-auto">
+                <div className="h-9 w-9 flex items-center justify-center bg-brand-primary text-white text-xs font-bold font-mono uppercase">
+                  {items[currentIndex].author.slice(0, 2).toUpperCase()}
+                </div>
+                <span className="text-sm font-sans font-semibold text-brand-text">{items[currentIndex].author}</span>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Next (muted) card */}
+          <AnimatePresence initial={false}>
+            <motion.button
+              key={`next-${nextIndex}`}
+              type="button"
+              onClick={handleNext}
+              layout
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              whileHover={{ opacity: 0.75 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="hidden sm:flex relative flex-col text-left w-[200px] md:w-[250px] shrink-0 bg-brand-card border border-brand-border/60 rounded-none p-5 md:p-6 mt-8 opacity-50 scale-[0.92] shadow-sm cursor-pointer"
+              aria-label={`View testimonial from ${items[nextIndex].author}`}
+            >
+              <Quote className="absolute right-4 top-4 h-7 w-7 text-brand-primary/5 pointer-events-none" />
+              <div className="mb-3">{renderStars('h-2.5 w-2.5')}</div>
+              <p className="text-brand-text text-xs leading-relaxed italic font-light line-clamp-5 mb-4">
+                "{items[nextIndex].text}"
+              </p>
+              <div className="flex items-center gap-2 border-t border-brand-border pt-3 mt-auto">
+                <div className="h-6 w-6 flex items-center justify-center bg-brand-primary text-white text-[9px] font-bold font-mono uppercase">
+                  {items[nextIndex].author.slice(0, 2).toUpperCase()}
+                </div>
+                <span className="text-[11px] font-bold text-brand-text">{items[nextIndex].author}</span>
+              </div>
+            </motion.button>
+          </AnimatePresence>
         </div>
 
+        {/* Dot Pagination */}
+        <div className="flex items-center justify-center gap-2 mt-8">
+          {items.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => goTo(index)}
+              className={`h-2 w-2 rounded-full transition-colors duration-300 cursor-pointer ${
+                index === currentIndex ? 'bg-brand-primary' : 'bg-brand-border'
+              }`}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Embedded CSS for marquee animation and mask styling */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.33%); }
-        }
-        .animate-marquee {
-          animation: marquee 35s linear infinite;
-        }
-      `}</style>
+      {/* Bottom Info Bar */}
+      <div className="max-w-7xl mx-auto px-6 mt-10 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono uppercase tracking-[0.3em] text-brand-muted">
+        <span>{currentIndex + 1} / {total}</span>
+        <span>Swipe or use arrows to browse.</span>
+      </div>
     </section>
   );
 }

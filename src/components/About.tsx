@@ -46,8 +46,7 @@ export default function About({ onCtaClick }: AboutProps) {
   ];
 
   const scrollToTransformations = () => {
-    const el = document.getElementById('transformations');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    window.open('https://www.instagram.com/surya_calis_client_result/', '_blank', 'noopener,noreferrer');
   };
 
   return (
