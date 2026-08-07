@@ -14,7 +14,7 @@ interface VideoSectionProps {}
 
 export default function VideoSection(_: VideoSectionProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const content = { youtube_id: '78zo1AeWSc8', video_title: 'Calisthenics Masterclass & Progression Secrets' };
+  const content = { youtube_id: 'A2Pyek_zsq0', video_title: 'Online Calisthenics Coaching' };
   const sectionRef = useRef<HTMLDivElement>(null);
 
   // The user's *intent*: do they want sound on, if the video is visible?
@@ -36,16 +36,29 @@ export default function VideoSection(_: VideoSectionProps) {
   // showinfo=0         -> (legacy) no title/uploader info
   // enablejsapi=1       -> required so we can postMessage play/pause/mute commands
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
-  const embedUrl = `https://www.youtube.com/embed/${content.youtube_id}?autoplay=0&mute=1&loop=1&playlist=${content.youtube_id}&controls=0&disablekb=1&fs=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&showinfo=0&enablejsapi=1&origin=${origin}`;
+  const embedUrl = `https://www.youtube.com/embed/${content.youtube_id}?autoplay=0&mute=1&loop=1&playlist=${content.youtube_id}&controls=0&disablekb=1&fs=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&cc_load_policy=0&showinfo=0&enablejsapi=1&origin=${origin}`;
 
-  // Send a command to the embedded YouTube player via postMessage,
+  // Send commands to the embedded YouTube player via postMessage,
   // following the YouTube IFrame API protocol.
-  const postCommand = useCallback((func: 'mute' | 'unMute' | 'playVideo' | 'pauseVideo') => {
+  const postCommand = useCallback((func: string, args: unknown[] = []) => {
     iframeRef.current?.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func, args: [] }),
+      JSON.stringify({ event: 'command', func, args }),
       'https://www.youtube.com'
     );
   }, []);
+
+  // Force captions/subtitles off even if the viewer's YouTube account
+  // has captions enabled by default.
+  const disableCaptions = useCallback(() => {
+    postCommand('setOption', ['captions', 'track', {}]);
+    postCommand('unloadModule', ['captions']);
+  }, [postCommand]);
+
+  const disableCaptionsWithRetry = useCallback(() => {
+    disableCaptions();
+    window.setTimeout(disableCaptions, 250);
+    window.setTimeout(disableCaptions, 900);
+  }, [disableCaptions]);
 
   // Actual audio state = user wants sound AND the video is currently on screen.
   const isAudible = wantsSound && isInView;
@@ -60,6 +73,11 @@ export default function VideoSection(_: VideoSectionProps) {
   useEffect(() => {
     postCommand(isInView ? 'playVideo' : 'pauseVideo');
   }, [isInView, postCommand]);
+
+  // Re-apply caption-off commands when visible to guard against player resets.
+  useEffect(() => {
+    if (isInView) disableCaptionsWithRetry();
+  }, [isInView, disableCaptionsWithRetry]);
 
   // Watch for the video entering/leaving the viewport.
   useEffect(() => {
@@ -117,6 +135,7 @@ export default function VideoSection(_: VideoSectionProps) {
                 ref={iframeRef}
                 src={embedUrl}
                 title={content.video_title}
+                onLoad={disableCaptionsWithRetry}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 className="absolute top-0 left-0 w-full h-full border-0"
               />

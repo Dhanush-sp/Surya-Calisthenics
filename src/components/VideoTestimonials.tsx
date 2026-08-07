@@ -7,7 +7,18 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Volume2, VolumeX, Film, Play, TrendingUp, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import {
+  Volume2,
+  VolumeX,
+  Film,
+  Play,
+  TrendingUp,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  ChevronDown,
+  X,
+} from 'lucide-react';
 
 const AUTO_SCROLL_SPEED = 0.55;
 
@@ -96,8 +107,8 @@ export default function VideoTestimonials() {
     return null;
   }
 
+  // ---- Horizontal preview row (unchanged) ----
   const trackRef = useRef<HTMLDivElement>(null);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -115,6 +126,11 @@ export default function VideoTestimonials() {
   const pointerDownPositionRef = useRef<{ x: number; y: number } | null>(null);
   const clickedIndexRef = useRef<string | null>(null);
   const clickThreshold = 8;
+
+  // ---- Full-screen "Shorts" popup feed ----
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const feedRef = useRef<HTMLDivElement>(null);
+  const scrollRafRef = useRef<number | null>(null);
 
   const loopedItems = items.length > 0 ? [...items, ...items, ...items] : [];
 
@@ -243,11 +259,58 @@ export default function VideoTestimonials() {
     targetXRef.current += direction === 'prev' ? advance : -advance;
   };
 
-  const currentClient = items[activeIndex];
-  const currentVideoId = currentClient.videoId;
+  const originParam =
+    typeof window !== 'undefined' ? encodeURIComponent(window.location.origin) : '';
 
-  const centerEmbedUrl = `https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=${currentVideoId}&controls=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&showinfo=0&disablekb=1&fs=0&enablejsapi=1&origin=${typeof window !== 'undefined' ? encodeURIComponent(window.location.origin) : ''}`;
+  // Jump the popup feed to a given slide (used by the chevrons + keyboard nav).
+  const scrollToSlide = (index: number) => {
+    const el = feedRef.current;
+    if (!el) return;
+    const clamped = Math.min(Math.max(index, 0), items.length - 1);
+    el.scrollTo({ top: clamped * el.clientHeight, behavior: 'smooth' });
+  };
 
+  const goToPrevSlide = () => scrollToSlide(activeIndex - 1);
+  const goToNextSlide = () => scrollToSlide(activeIndex + 1);
+
+  // Track which slide is currently snapped into view as the user scrolls the feed.
+  const handleFeedScroll = () => {
+    if (scrollRafRef.current) return;
+    scrollRafRef.current = requestAnimationFrame(() => {
+      scrollRafRef.current = null;
+      const el = feedRef.current;
+      if (!el) return;
+      const slideHeight = el.clientHeight;
+      if (!slideHeight) return;
+      const idx = Math.round(el.scrollTop / slideHeight);
+      const clamped = Math.min(Math.max(idx, 0), items.length - 1);
+      setActiveIndex((prev) => (prev === clamped ? prev : clamped));
+    });
+  };
+
+  // On open: lock page scroll and snap the feed to whichever video was tapped.
+  useEffect(() => {
+    if (!isExpanded) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const raf = requestAnimationFrame(() => {
+      const el = feedRef.current;
+      if (el) {
+        el.scrollTo({ top: activeIndex * el.clientHeight, behavior: 'auto' });
+      }
+    });
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      cancelAnimationFrame(raf);
+    };
+    // Only re-run when the popup opens/closes — activeIndex here is intentionally
+    // read once (the index set at click-time), not tracked as a scroll trigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExpanded]);
+
+  // Nudge playback/mute state on the active iframe once it reports ready.
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (typeof e.data !== 'string') return;
@@ -272,9 +335,8 @@ export default function VideoTestimonials() {
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [currentVideoId, isMuted]);
+  }, [activeIndex, isMuted]);
 
-  // When popup opens, try to ensure playback and audio state (unmute) via postMessage.
   useEffect(() => {
     if (!isExpanded) return;
 
@@ -294,24 +356,31 @@ export default function VideoTestimonials() {
       }
     };
 
-    // First attempt immediately, then a short retry to satisfy browser/autoplay timing
     tryUnmute();
     const t = window.setTimeout(tryUnmute, 300);
     return () => clearTimeout(t);
-  }, [isExpanded, isMuted]);
+  }, [isExpanded, isMuted, activeIndex]);
 
+  // Escape closes the popup; arrow keys move between videos.
   useEffect(() => {
     if (!isExpanded) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsExpanded(false);
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        goToNextSlide();
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        goToPrevSlide();
       }
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isExpanded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExpanded, activeIndex]);
 
   return (
     <section className="py-14 md:py-20 bg-brand-bg text-brand-text relative border-b border-brand-border overflow-hidden" id="video-testimonials">
@@ -367,9 +436,6 @@ export default function VideoTestimonials() {
                   <div className="absolute top-3 left-3 z-10 rounded-none bg-black/70 border border-white/15 px-2 py-1 text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-white">
                     {item.badge}
                   </div>
-                  {/* <div className="absolute top-3 right-3 z-10 rounded-none bg-black/70 border border-white/15 px-2 py-1 text-[8px] md:text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-white">
-                    {item.videoDuration}
-                  </div> */}
 
                   <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
                     <motion.div
@@ -384,9 +450,6 @@ export default function VideoTestimonials() {
                   <div className="absolute inset-x-0 bottom-0 h-32 sm:h-36 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
                   <div className="absolute inset-x-0 bottom-0 z-20 px-4 pb-4 pt-24">
                     <h3 className="text-sm md:text-base font-bold text-white leading-tight">{item.athlete}</h3>
-                    {/* <p className="mt-2 text-[8px] md:text-[10px] uppercase tracking-[0.22em] text-brand-primary font-bold">
-                      {item.weekLabel}
-                    </p> */}
                     <div className="mt-3 flex items-start gap-2.5">
                       <div className="h-8 w-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-brand-primary">
                         <TrendingUp className="h-3.5 w-3.5" />
@@ -436,79 +499,150 @@ export default function VideoTestimonials() {
         </div>
       </div>
 
+      {/* ============================================================ */}
+      {/* Full-screen "Shorts" style popup — vertical scroll-snap feed  */}
+      {/* ============================================================ */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.24 }}
-            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
-            onPointerDown={() => setIsExpanded(false)}
+            transition={{ duration: 0.22 }}
+            className="fixed inset-0 z-[100] bg-black"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Client progress video"
           >
-            <motion.div
-              initial={{ opacity: 0, y: 24, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 24, scale: 0.98 }}
-              transition={{ type: 'spring', damping: 24, stiffness: 220 }}
-              className="relative z-10 w-full max-w-[420px]"
-              onPointerDown={(event) => event.stopPropagation()}
+            {/* Scrollable, snap-locked feed. Native swipe/scroll/wheel moves between videos. */}
+            <div
+              ref={feedRef}
+              onScroll={handleFeedScroll}
+              className="relative h-[100dvh] w-full overflow-y-auto overscroll-contain snap-y snap-mandatory [&::-webkit-scrollbar]:hidden"
+              style={{ scrollbarWidth: 'none' }}
             >
-              <div className="relative overflow-hidden rounded-none border border-white/10 bg-black shadow-2xl">
-                <iframe
-                  key={`${activeIndex}-${isMuted ? 'm' : 'u'}`}
-                  ref={iframeRef}
-                  src={`https://www.youtube.com/embed/${currentVideoId}?autoplay=1&mute=${isMuted ? 1 : 0}&controls=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&origin=${typeof window !== 'undefined' ? encodeURIComponent(window.location.origin) : ''}`}
-                  title={`${currentClient.athlete} progression`}
-                  allow="autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                  className="w-full aspect-[9/16] bg-black"
-                  style={{ border: 'none' }}
-                  referrerPolicy="strict-origin-when-cross-origin"
-                />
+              {items.map((item, idx) => {
+                const isActive = idx === activeIndex;
+                return (
+                  <div
+                    key={`${item.videoId}-${idx}`}
+                    className="relative h-[100dvh] w-full snap-start snap-always flex items-center justify-center"
+                  >
+                    {/* Video card: full-bleed on mobile, phone-framed on larger screens */}
+                    <div className="relative h-full w-full sm:h-[92dvh] sm:max-h-[880px] sm:w-auto sm:aspect-[9/16] mx-auto bg-black overflow-hidden sm:border sm:border-white/10 sm:shadow-2xl">
+                      {isActive ? (
+                        <iframe
+                          key={`${item.videoId}-${isMuted ? 'm' : 'u'}`}
+                          ref={iframeRef}
+                          src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=${item.videoId}&controls=1&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3&enablejsapi=1&origin=${originParam}`}
+                          title={`${item.athlete} progression`}
+                          allow="autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                          className="absolute inset-0 w-full h-full"
+                          style={{ border: 'none' }}
+                          referrerPolicy="strict-origin-when-cross-origin"
+                        />
+                      ) : (
+                        <div className="absolute inset-0">
+                          <img
+                            src={`https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`}
+                            alt={item.athlete}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            draggable={false}
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="h-14 w-14 rounded-full bg-black/50 border border-white/20 flex items-center justify-center">
+                              <Play className="h-5 w-5 text-white" />
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
-                <button
-                  onClick={() => setIsExpanded(false)}
-                  className="absolute top-3 right-3 z-20 text-white bg-black/60 border border-white/15 p-2 rounded-full hover:bg-black/80 transition-colors"
-                  title="Close video popup"
-                  aria-label="Close video popup"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+                      {/* Scrims for legibility — text/controls sit ON the video, never below it */}
+                      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/70 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsMuted((prev) => !prev);
-                  }}
-                  className="absolute bottom-3 right-3 z-20 h-10 w-10 rounded-full bg-black/70 border border-white/15 flex items-center justify-center text-white transition-colors hover:bg-black/80"
-                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-                >
-                  {isMuted ? (
-                    <VolumeX className="h-4.5 w-4.5 text-rose-400" />
-                  ) : (
-                    <Volume2 className="h-4.5 w-4.5 text-emerald-400" />
-                  )}
-                </button>
-              </div>
-
-              <div className="mt-4 rounded-none border border-white/10 bg-[#0D0D0D] p-4 text-white">
-                <p className="text-[9px] uppercase tracking-[0.3em] text-brand-primary font-bold mb-2">
-                  {currentClient.weekLabel}
-                </p>
-                <h3 className="text-xl md:text-2xl font-serif italic font-normal leading-tight">
-                  {currentClient.athlete}
-                </h3>
-                <div className="mt-4 flex items-start gap-2.5">
-                  <div className="h-10 w-10 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-brand-primary">
-                    <TrendingUp className="h-4 w-4" />
+                      {/* Athlete name + stats overlay — always visible, any screen size */}
+                      <div
+                        className="absolute inset-x-0 bottom-0 z-20 px-5 sm:px-6 pt-10"
+                        style={{ paddingBottom: 'max(1.5rem, calc(env(safe-area-inset-bottom) + 1rem))' }}
+                      >
+                        <p className="text-[9px] md:text-[10px] font-mono font-bold uppercase tracking-[0.3em] text-brand-primary mb-2">
+                          {item.weekLabel}
+                        </p>
+                        <h3 className="text-xl sm:text-2xl font-serif italic font-normal text-white leading-tight mb-3">
+                          {item.athlete}
+                        </h3>
+                        <div className="flex items-start gap-2.5">
+                          <div className="h-9 w-9 shrink-0 rounded-full bg-black/60 border border-white/15 flex items-center justify-center text-brand-primary">
+                            <TrendingUp className="h-4 w-4" />
+                          </div>
+                          <div className="space-y-0.5 text-white/90 text-xs sm:text-sm leading-snug">
+                            <p className="font-semibold text-white">{item.statHeadline}</p>
+                            <p className="text-zinc-300">{item.statSubtext}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="space-y-1 text-sm md:text-base leading-snug text-zinc-300">
-                    <p className="font-semibold text-white">{currentClient.statHeadline}</p>
-                    <p>{currentClient.statSubtext}</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Fixed top bar: slide count + close button — safe-area aware, always reachable */}
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between px-4 sm:px-6"
+              style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}
+            >
+              <span className="pointer-events-auto rounded-full bg-black/55 border border-white/15 px-3 py-1.5 text-[10px] font-mono font-bold tracking-widest text-white">
+                {activeIndex + 1} / {items.length}
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsExpanded(false)}
+                aria-label="Close video"
+                className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full bg-black/55 border border-white/15 text-white transition-colors hover:bg-black/75 active:scale-95"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Mute toggle — fixed position, unaffected by scroll or overlay text length */}
+            <button
+              type="button"
+              onClick={() => setIsMuted((prev) => !prev)}
+              aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+              className="absolute right-4 sm:right-6 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 border border-white/15 text-white transition-colors hover:bg-black/75"
+              style={{ bottom: 'max(6.5rem, calc(env(safe-area-inset-bottom) + 6rem))' }}
+            >
+              {isMuted ? (
+                <VolumeX className="h-4.5 w-4.5 text-rose-400" />
+              ) : (
+                <Volume2 className="h-4.5 w-4.5 text-emerald-400" />
+              )}
+            </button>
+
+            {/* Prev/next chevrons — desktop-friendly alternative to swipe/scroll */}
+            <div className="hidden sm:flex absolute right-4 sm:right-6 top-1/2 z-30 -translate-y-1/2 flex-col gap-3">
+              <button
+                type="button"
+                onClick={goToPrevSlide}
+                disabled={activeIndex === 0}
+                aria-label="Previous video"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 border border-white/10 text-white shadow-xl transition-colors hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/15"
+              >
+                <ChevronUp className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={goToNextSlide}
+                disabled={activeIndex === items.length - 1}
+                aria-label="Next video"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 border border-white/10 text-white shadow-xl transition-colors hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/15"
+              >
+                <ChevronDown className="h-4 w-4" />
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
