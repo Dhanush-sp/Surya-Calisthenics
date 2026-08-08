@@ -77,7 +77,7 @@ const DEFAULT_HERO: HeroContentV2 = {
   primaryCtaText: 'Start Your Transformation',
   secondaryCtaText: 'View Client Results',
   stats: [
-    { icon: 'users', value: '132K+', label: 'Community on Instagram' },
+    { icon: 'users', value: '130K+', label: 'Community on Instagram' },
     { icon: 'badge', value: 'WSWCF', label: 'Certified Calisthenics Coach' },
     { icon: 'user', value: '100+', label: 'Students Trained' },
     { icon: 'calendar', value: '3+', label: 'Years of Training Experience' },
