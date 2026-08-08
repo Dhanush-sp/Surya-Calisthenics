@@ -12,7 +12,7 @@ interface FloatingCtaProps {
 }
 
 export default function FloatingCta({ onClick }: FloatingCtaProps) {
-  const content = { button_text: 'Join Program Now' };
+  const content = { button_text: 'Join 1-1 Personal Training' };
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
