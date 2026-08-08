@@ -13,12 +13,16 @@ export default function Faq(_: FaqProps) {
   const section_title = 'Frequently Asked Questions';
   const section_subtitle = 'Everything you need to know before you start your bodyweight transformation.';
   const items = [
-    { question: 'Can beginners join?', answer: 'Yes, every exercise is scalable to match your current fitness level with beginner-friendly progressions.' },
+    { question: 'Can beginners join?', answer: 'Absolutely. Whether you’re starting from 5 knee pushup or already have training experience, your program is tailored to your current fitness level. We’ll build a solid foundation first, then progress step by step toward your goals safely and confidently.' },
     { question: 'Do I need a gym?', answer: 'No, you can train anywhere using your body weight, though a pull-up bar or resistance bands help.' },
-    { question: 'Can I lose fat?', answer: 'Yes, high-energy bodyweight workouts burn calories, boost your metabolism, and help strip body fat.' },
+    { question: 'Can i loose fat !', answer: 'Absolutely. Calisthenics combines challenging bodyweight movements with strength and conditioning, helping you burn calories, build lean muscle, and improve your overall fitness. Combined with the right nutrition and a consistent training plan, it can help you reduce body fat and achieve a leaner, stronger physique.' },
     { question: 'Can I build muscle?', answer: 'Yes, by applying progressive overload with tougher variations and leverage, you will build lean muscle.' },
     { question: 'How many days per week?', answer: '5 to 6 days per week is ideal for steady progress and proper recovery.' },
     { question: 'Do you provide nutrition?', answer: 'Yes, I provide clear nutrition guidelines and calorie/macro targets to support your goals.' },
+    { question: 'How is the coaching personalized?', answer: 'Every athlete receives a customized training plan based on their goals, current ability, mobility, strengths, and limitations. Your program evolves as you progress, ensuring continuous improvement without unnecessary plateaus.' },
+     { question: 'How often will we review my progress?', answer: 'Your progress is reviewed regularly through daily  training updates, and form assessments. Based on your performance and recovery, your program is adjusted to keep you progressing consistently.' },
+     { question: 'How long before I see results?', answer: 'Results vary depending on your consistency, effort, and starting point. Most athletes notice improvements in strength, movement quality, and confidence within the first few weeks, with significant physical and skill progress developing over time.' },
+      { question: 'What if I’ve had previous injuries?', answer: 'Your training program will be adapted to your injury history, mobility, and current capabilities. Exercises and progressions are selected carefully to help you train safely while improving strength, movement quality, and confidence.' },
   ];
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
