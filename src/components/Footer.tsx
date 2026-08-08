@@ -15,6 +15,8 @@ export default function Footer({ onJoinCtaClick }: FooterProps) {
   const content = {
     instagram_url: 'https://www.instagram.com/surya_calisthenics/',
     youtube_url: 'https://www.youtube.com/@suryacalisthenics',
+    developer_instagram_url: 'https://www.instagram.com/dhanush_webdev/',
+    developer_instagram_handle: '@Dhanush',
     contact_email: 'contact@bodyweightathlete.com',
     contact_phone: '+1 (555) 019-3829',
     copyright: '© 2026 Surya Calisthenics. All rights reserved.',
@@ -121,11 +123,23 @@ export default function Footer({ onJoinCtaClick }: FooterProps) {
 
         </div>
 
-        {/* Bottom Bar: Copyright & Scroll to top */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 text-[11px] font-mono text-brand-muted">
-          <span className="font-light">{content.copyright}</span>
-          
-          <div className="flex items-center gap-4 uppercase tracking-widest">
+        {/* Bottom Bar: Craft Credit, Copyright & Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-5 pt-8 text-[11px] font-mono text-brand-muted">
+          <p className="order-2 lg:order-1 justify-self-center lg:justify-self-start text-[10px] tracking-widest uppercase">
+            <span className="text-brand-muted/70">Craft by </span>
+            <a
+              href={content.developer_instagram_url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-brand-primary hover:text-brand-secondary transition-colors"
+            >
+              {content.developer_instagram_handle}
+            </a>
+          </p>
+
+          <span className="order-1 lg:order-2 justify-self-center text-center font-light">{content.copyright}</span>
+
+          <div className="order-3 flex items-center justify-center lg:justify-self-end gap-4 uppercase tracking-widest">
             <button
               onClick={onJoinCtaClick}
               className="text-brand-primary hover:text-brand-secondary transition-colors font-bold"
