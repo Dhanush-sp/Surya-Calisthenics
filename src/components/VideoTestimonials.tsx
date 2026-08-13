@@ -28,6 +28,16 @@ const DEFAULT_VIDEO_TESTIMONIALS = {
   section_subtitle: 'Drag or swipe the video horizontally to slide through progress clips.',
   items: [
     {
+      athlete: 'Janani',
+      badge: 'CROW POSE + HANDSTAND',
+      videoId: 'l-OZl7l3Cw4',
+      videoDuration: '2:14',
+      weekLabel: 'WEEK 12 • MUSCLE-UP PROGRESS',
+      statHeadline: 'Handstand Unlocked',
+      statSubtext: 'Age 22',
+      desc: 'Demonstrating solid front lever control and explosive muscle-up strength after consistent progressions.'
+    },
+    {
       athlete: 'Sudarson',
       badge: 'FROG STAND',
       videoId: 'K19dK9baLPA',
@@ -37,6 +47,7 @@ const DEFAULT_VIDEO_TESTIMONIALS = {
       statSubtext: '4 Months',
       desc: 'Demonstrating solid front lever control and explosive muscle-up strength after consistent progressions.'
     },
+    
     {
       athlete: 'Nandha',
       badge: 'HEADSTAND',
@@ -45,6 +56,16 @@ const DEFAULT_VIDEO_TESTIMONIALS = {
       weekLabel: 'WEEK 16 • HANDSTAND BREAKTHROUGH',
       statHeadline: 'Built Headstand Progress',
       statSubtext: 'age 28',
+      desc: 'Achieving clean freestanding holds and tight body alignment through targeted shoulder work.'
+    },
+    {
+      athlete: 'Maalya',
+      badge: 'ELBOW LEVER + CROW POSE',
+      videoId: '3za9WFSy560',
+      videoDuration: '1:58',
+      weekLabel: 'WEEK 16 • HANDSTAND BREAKTHROUGH',
+      statHeadline: 'Built Elbow Lever Progress',
+      statSubtext: 'age 23',
       desc: 'Achieving clean freestanding holds and tight body alignment through targeted shoulder work.'
     },
     {
@@ -68,6 +89,16 @@ const DEFAULT_VIDEO_TESTIMONIALS = {
       desc: 'Restoring overhead movement quality and smooth press patterns through mobility-focused training.'
     },
     {
+      athlete: 'FEMALE',
+      badge: 'CROW POSE',
+      videoId: 'WHal9XiGz0I',
+      videoDuration: '1:52',
+      weekLabel: 'PROGRESS • CROW POSE',
+      statHeadline: 'PROGRESS • CROW POSE',
+      statSubtext: 'Basics to Intermediate',
+      desc: 'Restoring overhead movement quality and smooth press patterns through mobility-focused training.'
+    },
+    {
       athlete: 'From USA',
       badge: 'HAND STAND',
       videoId: 'iS2dAzsx2qo',
@@ -77,6 +108,7 @@ const DEFAULT_VIDEO_TESTIMONIALS = {
       statSubtext: 'USA',
       desc: 'Restoring overhead movement quality and smooth press patterns through mobility-focused training.'
     },
+   
     {
       athlete: 'Nithyan',
       badge: 'FROG STAND',
@@ -567,9 +599,9 @@ export default function VideoTestimonials() {
                         className="absolute inset-x-0 bottom-0 z-20 px-5 sm:px-6 pt-10"
                         style={{ paddingBottom: 'max(1.5rem, calc(env(safe-area-inset-bottom) + 1rem))' }}
                       >
-                        <p className="text-[9px] md:text-[10px] font-mono font-bold uppercase tracking-[0.3em] text-brand-primary mb-2">
+                        {/* <p className="text-[9px] md:text-[10px] font-mono font-bold uppercase tracking-[0.3em] text-brand-primary mb-2">
                           {item.weekLabel}
-                        </p>
+                        </p> */}
                         <h3 className="text-xl sm:text-2xl font-serif italic font-normal text-white leading-tight mb-3">
                           {item.athlete}
                         </h3>
