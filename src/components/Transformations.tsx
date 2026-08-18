@@ -21,7 +21,7 @@ import transform1 from '../images/transform1.png';
 import transform2 from '../images/transform2.png';
 import transform3 from '../images/transform3.jpg';
 import transform4 from '../images/transform4.png';
-import transform5 from '../images/transform5.png';
+import transform5 from '../images/transform5.PNG';
 
 interface TransformationsProps {
   items?: TransformationItem[];
