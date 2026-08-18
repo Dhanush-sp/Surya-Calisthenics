@@ -47,11 +47,13 @@ export default function App() {
       {/* 2. Persistent Floating CTA */}
       <FloatingCta onClick={triggerSignupPortal} />
 
+      {/* 4. Client Transformations Gallery */}
+      <Transformations onCtaClick={triggerSignupPortal} />
+
       {/* 3. Video Section */}
       <VideoSection />
 
-      {/* 4. Client Transformations Gallery */}
-      <Transformations onCtaClick={triggerSignupPortal} />
+      
 
       {/* 5. Video Testimonials Carousel */}
       <VideoTestimonials />

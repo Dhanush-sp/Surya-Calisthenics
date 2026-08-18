@@ -21,6 +21,7 @@ import transform1 from '../images/transform1.png';
 import transform2 from '../images/transform2.png';
 import transform3 from '../images/transform3.jpg';
 import transform4 from '../images/transform4.png';
+import transform5 from '../images/transform5.png';
 
 interface TransformationsProps {
   items?: TransformationItem[];
@@ -55,6 +56,11 @@ export default function Transformations({ items: itemsProp, onCtaClick }: Transf
       img: transform4,
       name: 'Sidharth',
       desc: 'Muscle-ups, Handstands, and more! Sidharth has been training with me for the past 3 months, and his progress has been nothing short of amazing. From mastering the basics to achieving advanced skills, he’s shown incredible dedication and hard work. I’m proud to have been a part of his journey and can’t wait to see what he accomplishes next!'
+    },
+    {
+      img: transform5,
+      name: 'Nandha',
+      desc: 'Built Muscle and Strength! This transformation is a testament to the power of consistent training and dedication. Over the past few months, he has made significant gains in muscle mass and overall strength.'
     }
   ];
   const items: TransformationItem[] = itemsProp && itemsProp.length > 0 ? itemsProp : defaultItems;
