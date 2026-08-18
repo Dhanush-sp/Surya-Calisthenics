@@ -74,7 +74,7 @@ const DEFAULT_HERO: HeroContentV2 = {
   paragraph:
     'I help you build real strength, unlock advanced skills, and transform your body through structured calisthenics training, nutrition guidance, and 1-on-1 support tailored to your goals.',
   image: heroImage,
-  primaryCtaText: 'Start Your Transformation',
+  primaryCtaText: 'DM on Instagram for Queries',
   secondaryCtaText: 'View Client Results',
   stats: [
     { icon: 'users', value: '130K+', label: 'Community on Instagram' },
@@ -131,18 +131,79 @@ export default function Hero({ onPrimaryCtaClick, onSecondaryCtaClick }: HeroPro
       {/* mockup: top nav bar, then image+stats row, then full-width   */}
       {/* headline/copy/CTAs stacked underneath.                       */}
       {/* ============================================================ */}
+      {/* Dark features bar — shared across breakpoints, unchanged */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="bg-zinc-950 text-white"
+      >
+        <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-14 lg:px-16 py-5 lg:py-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-white/10">
+            {c.features.map((feature, idx) => {
+              const Icon = FeatureIconMap[feature.icon];
+              return (
+                <div key={idx} className="flex items-start gap-3 lg:px-6 lg:first:pl-0">
+                  <Icon className="h-5 w-5 text-brand-primary shrink-0 mt-0.5" strokeWidth={1.75} />
+                  <div>
+                    <h4 className="text-xs md:text-sm font-extrabold uppercase tracking-wide mb-1">
+                      {feature.title}
+                    </h4>
+                    <p className="text-[11px] md:text-xs text-zinc-400 font-light leading-relaxed">
+                      {feature.text}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="h-px w-full bg-white/10 my-5" />
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-zinc-400 uppercase">
+              {c.followLabel}
+            </span>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2.5">
+                {c.socials.map((social, idx) => {
+                  const Icon = SocialIconMap[social.platform];
+                  return (
+                    <a
+                      key={idx}
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={social.platform}
+                      className="h-8 w-8 flex items-center justify-center bg-brand-primary/10 border border-brand-primary/30 hover:bg-brand-primary/20 rounded-md text-brand-primary transition-all"
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                    </a>
+                  );
+                })}
+              </div>
+              <span className="text-white/20 hidden sm:inline">|</span>
+              <span className="text-xs md:text-sm font-mono font-bold tracking-widest text-white">
+                {c.handle}
+              </span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+      
       <div className="lg:hidden">
 
         {/* Top nav bar: logo left, hamburger right */}
         <div className="flex items-center justify-between px-5 pt-5 pb-1">
-          <div className="text-left leading-none">
+          {/* <div className="text-left leading-none">
             <span className="font-script block text-xl sm:text-2xl text-brand-primary leading-none">
               {c.logoScript}
             </span>
             <span className="block text-[9px] sm:text-[10px] font-extrabold tracking-[0.25em] text-brand-text mt-1">
               {c.logoBold}
             </span>
-          </div>
+          </div> */}
           {/* Placeholder trigger only — wire this up to a mobile nav drawer if/when one exists */}
           {/* <button
             type="button"
@@ -252,14 +313,14 @@ export default function Hero({ onPrimaryCtaClick, onSecondaryCtaClick }: HeroPro
       {/* DESKTOP LAYOUT (lg and up) — unchanged from the original      */}
       {/* ============================================================ */}
       <div className="hidden lg:block">
-        <div className="absolute top-6 right-8 z-30 text-right bg-white/85 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-sm">
+        {/* <div className="absolute top-6 right-8 z-30 text-right bg-white/85 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-sm">
           <span className="font-script block text-2xl text-brand-primary leading-none">
             {c.logoScript}
           </span>
           <span className="block text-[10px] font-extrabold tracking-[0.35em] text-brand-text mt-1">
             {c.logoBold}
           </span>
-        </div>
+        </div> */}
 
         <div className="max-w-[1600px] mx-auto grid grid-cols-12 items-stretch">
           <div className="relative col-span-5 h-auto min-h-[560px] overflow-hidden bg-neutral-50 pl-6">
@@ -362,66 +423,7 @@ export default function Hero({ onPrimaryCtaClick, onSecondaryCtaClick }: HeroPro
         </div>
       </div>
 
-      {/* Dark features bar — shared across breakpoints, unchanged */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="bg-zinc-950 text-white"
-      >
-        <div className="max-w-[1600px] mx-auto px-6 sm:px-10 md:px-14 lg:px-16 py-5 lg:py-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-white/10">
-            {c.features.map((feature, idx) => {
-              const Icon = FeatureIconMap[feature.icon];
-              return (
-                <div key={idx} className="flex items-start gap-3 lg:px-6 lg:first:pl-0">
-                  <Icon className="h-5 w-5 text-brand-primary shrink-0 mt-0.5" strokeWidth={1.75} />
-                  <div>
-                    <h4 className="text-xs md:text-sm font-extrabold uppercase tracking-wide mb-1">
-                      {feature.title}
-                    </h4>
-                    <p className="text-[11px] md:text-xs text-zinc-400 font-light leading-relaxed">
-                      {feature.text}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="h-px w-full bg-white/10 my-5" />
-
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span className="text-[10px] font-mono font-bold tracking-[0.3em] text-zinc-400 uppercase">
-              {c.followLabel}
-            </span>
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2.5">
-                {c.socials.map((social, idx) => {
-                  const Icon = SocialIconMap[social.platform];
-                  return (
-                    <a
-                      key={idx}
-                      href={social.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={social.platform}
-                      className="h-8 w-8 flex items-center justify-center bg-brand-primary/10 border border-brand-primary/30 hover:bg-brand-primary/20 rounded-md text-brand-primary transition-all"
-                    >
-                      <Icon className="h-3.5 w-3.5" />
-                    </a>
-                  );
-                })}
-              </div>
-              <span className="text-white/20 hidden sm:inline">|</span>
-              <span className="text-xs md:text-sm font-mono font-bold tracking-widest text-white">
-                {c.handle}
-              </span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+      
     </section>
   );
 }

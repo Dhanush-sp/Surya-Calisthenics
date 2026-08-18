@@ -25,9 +25,14 @@ import { X, Award, Flame, Zap, ShieldCheck } from 'lucide-react';
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const instagramDmUrl = 'https://ig.me/m/surya_calisthenics';
 
   const triggerSignupPortal = () => {
     window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSdk2ypkGUNJOYUwSAfm_Nun9gGeS0zgC4ycJyEtLlRJC1NV2g/viewform';
+  };
+
+  const triggerInstagramDm = () => {
+    window.open(instagramDmUrl, '_blank', 'noopener,noreferrer');
   };
 
   // Used by the Hero's secondary CTA ("View Client Results") to jump to the transformations gallery
@@ -41,29 +46,40 @@ export default function App() {
   return (
     <div className="bg-brand-bg min-h-screen text-brand-text font-sans antialiased selection:bg-brand-primary selection:text-white scroll-smooth">
       
+
+     {/* 3. Video Section */}
+      <VideoSection />
+
       {/* 1. Hero Section */}
-      <Hero onPrimaryCtaClick={triggerSignupPortal} onSecondaryCtaClick={scrollToResults} />
+      <Hero onPrimaryCtaClick={triggerInstagramDm} onSecondaryCtaClick={scrollToResults} />
+
+      
+      {/* 4. Client Transformations Gallery */}
+      <Transformations onCtaClick={triggerSignupPortal} />
+
+      {/* 6. About the Coach */}
+      <About onCtaClick={triggerSignupPortal} />
+
+      
 
       {/* 2. Persistent Floating CTA */}
       <FloatingCta onClick={triggerSignupPortal} />
 
-      {/* 3. Video Section */}
-      <VideoSection />
+      
 
-      {/* 4. Client Transformations Gallery */}
-      <Transformations onCtaClick={triggerSignupPortal} />
 
       {/* 5. Video Testimonials Carousel */}
       <VideoTestimonials />
 
-      {/* 6. About the Coach */}
-      <About onCtaClick={triggerSignupPortal} />
+      
 
       {/* 7. Reviews / Testimonials (Infinite Marquee) */}
       <Reviews />
 
       {/* 8. Program Details */}
       <ProgramDetails onCtaClick={triggerSignupPortal} />
+
+      
 
       {/* 9. FAQ */}
       <Faq />

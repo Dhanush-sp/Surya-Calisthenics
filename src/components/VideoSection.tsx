@@ -8,6 +8,7 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Film, Play, Volume2, VolumeX } from 'lucide-react';
+import logoImage from '../images/favicon.png';
 
 interface VideoSectionProps {}
 
@@ -15,6 +16,7 @@ export default function VideoSection(_: VideoSectionProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const content = { youtube_id: 'A2Pyek_zsq0', video_title: 'Online Calisthenics Coaching' };
   const sectionRef = useRef<HTMLDivElement>(null);
+  const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdk2ypkGUNJOYUwSAfm_Nun9gGeS0zgC4ycJyEtLlRJC1NV2g/viewform';
 
   // Video playback & sound states
   const [isPlaying, setIsPlaying] = useState(false);
@@ -50,6 +52,10 @@ export default function VideoSection(_: VideoSectionProps) {
     postCommand('unMute');
     postCommand('playVideo');
     disableCaptionsWithRetry();
+  };
+
+  const handleApplyClick = () => {
+    window.open(googleFormUrl, '_blank', 'noopener,noreferrer');
   };
 
   // Toggle Mute / Unmute
@@ -94,20 +100,39 @@ export default function VideoSection(_: VideoSectionProps) {
 
   return (
     <section className="py-24 bg-brand-bg text-brand-text relative border-b border-brand-border" id="video">
-      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
-
-        {/* Section Header */}
-        <div className="mb-12">
-          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase mb-3">
-            <Film className="h-3.5 w-3.5 text-brand-primary" /> INSIDE MY COACHING SYSTEM
-          </span>
-          <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text">
-            Train smarter <span className="text-brand-primary">Progress faster</span>
-          </h2>
-          <p className="text-brand-muted text-sm md:text-sm max-w-xl mx-auto mt-4 font-sans font-light">
-            {content.video_title} — Discover the proven training methods, progressions, and coaching strategies I use to help athletes build real strength, master Basic to advanced calisthenics skills, and achieve consistent results—without wasting time on ineffective workouts.
-          </p>
+      {/* Top nav bar pinned to the top edge of the video section */}
+      <div className="absolute top-0 left-0 right-0 z-30">
+        <div className="w-full px-3 sm:px-5 md:px-6">
+          <div className="flex items-center justify-start pt-3 sm:pt-4 pb-1">
+            <div className="flex items-center gap-3">
+              <img
+                src={logoImage}
+                alt="Surya Calisthenics logo"
+                className="h-9 w-9 sm:h-10 sm:w-10 object-contain"
+                loading="eager"
+              />
+              <div className="text-left leading-none">
+                <span className="font-script block text-xl sm:text-2xl text-brand-primary leading-none">
+                  Surya
+                </span>
+                <span className="block text-[9px] sm:text-[10px] font-extrabold tracking-[0.25em] text-brand-text mt-1">
+                  CALISTHENICS
+                </span>
+              </div>
+            </div>
+            {/* Placeholder trigger only — wire this up to a mobile nav drawer if/when one exists */}
+            {/* <button
+              type="button"
+              aria-label="Open menu"
+              className="p-2 -mr-2 text-brand-text cursor-pointer"
+            >
+              <Menu className="h-6 w-6" strokeWidth={2} />
+            </button> */}
+          </div>
         </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
 
         {/* Video Player Frame */}
         <motion.div
@@ -183,6 +208,39 @@ export default function VideoSection(_: VideoSectionProps) {
             </div>
           </div>
         </motion.div>
+
+        <div className="mt-5 md:mt-6 flex justify-center">
+          <motion.button
+            type="button"
+            onClick={handleApplyClick}
+            animate={{
+              boxShadow: [
+                '0 0 0 0 rgba(255, 0, 0, 0.2), 0 8px 18px rgba(255, 0, 0, 0.18)',
+                '0 0 0 6px rgba(255, 0, 0, 0.12), 0 12px 28px rgba(255, 0, 0, 0.34)',
+                '0 0 0 0 rgba(255, 0, 0, 0.2), 0 8px 18px rgba(255, 0, 0, 0.18)'
+              ]
+            }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            whileHover={{ scale: 1.02, y: -1 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto px-6 md:px-8 py-3 bg-brand-primary text-white border border-brand-primary hover:bg-brand-secondary hover:border-brand-secondary transition-colors font-mono text-[11px] md:text-xs uppercase tracking-[0.18em] font-bold cursor-pointer"
+          >
+            Join 1-1 Personal Training
+          </motion.button>
+        </div>
+
+        {/* Section Header */}
+        {/* <div className="my-12">
+          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold tracking-[0.3em] text-brand-primary uppercase mb-3">
+            <Film className="h-3.5 w-3.5 text-brand-primary" /> INSIDE MY COACHING SYSTEM
+          </span>
+          <h2 className="text-4xl md:text-6xl font-serif italic font-normal tracking-tight text-brand-text">
+            Train smarter <span className="text-brand-primary">Progress faster</span>
+          </h2>
+          <p className="text-brand-muted text-sm md:text-sm max-w-xl mx-auto mt-4 font-sans font-light">
+            {content.video_title} — Discover the proven training methods, progressions, and coaching strategies I use to help athletes build real strength, master Basic to advanced calisthenics skills, and achieve consistent results—without wasting time on ineffective workouts.
+          </p>
+        </div> */}
       </div>
     </section>
   );
